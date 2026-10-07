@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "mission": "Increase retained knowledge and skills.",
+  "vision": "A personal library that helps you understand the world from first principles, connect ideas across systems, and use what you learn long after you close a book.",
+  "sections": [
+    {
+      "id": "first-principles",
+      "title": "First principles and systems",
+      "summary": "Understand the parts, the relationships, and the assumptions.",
+      "paragraphs": [
+        "First-principles reasoning starts with clearly stated observations, definitions, and assumptions. It builds an explanation from them and checks where that explanation stops applying. A familiar analogy can help, but it is not proof.",
+        "Systems thinking asks how interacting parts produce behavior over time. Feedback, limited resources, and delays can make the whole behave differently from any one part. A useful diagram states its boundary and explains every box and arrow."
+      ],
+      "bullets": [
+        "Separate a source's claim from your interpretation of it.",
+        "Ask what observation could show that an explanation is wrong.",
+        "Track what is known, what is inferred, and what remains uncertain."
+      ],
+      "references": []
+    },
+    {
+      "id": "learning-science",
+      "title": "Learning science and this design",
+      "summary": "Practice, spacing, and honest evidence guide the pilot.",
+      "paragraphs": [
+        "Retrieval practice can help learning as well as observe it. It means trying to bring learned information to mind. In prose-learning experiments, taking tests that required recall without answer choices improved later retention relative to repeated study. GenBooks therefore offers optional questions after reading and records answers and help separately. Its multiple-choice score is a different measure from those experiments.",
+        "Spacing matters, and useful gaps depend on how long information must be retained. GenBooks offers later practice and records teaching and question exposures. Its 24-hour and seven-day score-eligibility rules are product choices, not universal optimal intervals or a fitted forgetting curve.",
+        "Some experiments found that repeated testing also improved answers to new inferential questions a week later. This pilot keeps question identities and results visible across 17 multiple-choice questions. Familiar-item success does not establish transfer to new problems; separately assessed application tasks remain future work.",
+        "Feelings of learning and tested performance can differ. Enjoyment and difficulty reports therefore remain separate from points. Questions are optional and reading stays available. Our design inference from motivation research is to make feedback informative and preserve choice; the app has not measured an effect of this score on motivation."
+      ],
+      "bullets": [],
+      "references": [
+        {
+          "title": "Retrieval practice — Roediger and Karpicke (2006)",
+          "url": "https://doi.org/10.1111/j.1467-9280.2006.01693.x"
+        },
+        {
+          "title": "Spacing and retention intervals — Cepeda et al. (2008)",
+          "url": "https://doi.org/10.1111/j.1467-9280.2008.02209.x"
+        },
+        {
+          "title": "Testing and transfer — Butler (2010)",
+          "url": "https://doi.org/10.1037/a0019902"
+        },
+        {
+          "title": "Feeling of learning and tested performance — Deslauriers et al. (2019)",
+          "url": "https://doi.org/10.1073/pnas.1821936116"
+        },
+        {
+          "title": "Informational and controlling rewards — Ryan, Mims, and Koestner (1983)",
+          "url": "https://selfdeterminationtheory.org/SDT/documents/1983_RyanMimsKoestner.pdf"
+        }
+      ]
+    },
+    {
+      "id": "retained-knowledge",
+      "title": "Retained knowledge",
+      "summary": "What remains available to you later is the goal; a score is evidence about it.",
+      "paragraphs": [
+        "Retained knowledge is information and understanding a person can still access and use after time has passed. It is a latent property: GenBooks cannot directly inspect or total it.",
+        "In a conceptual learning model, retained knowledge is a stock, meaning something that accumulates and persists. Learning can add to it; forgetting or interference can reduce what is accessible. These processes are not measured as numerical flows in this app.",
+        "Finishing a reading records an action. Feeling familiar with its words records neither later retrieval nor successful application. A later answer provides a narrower observation about a particular question under particular conditions."
+      ],
+      "bullets": [
+        "The app does not equate pages read, time spent, confidence, or enjoyment with knowledge gained.",
+        "A wrong answer can reveal a gap or a misunderstanding; it does not measure the total amount you have forgotten.",
+        "The Physics check score is a limited record of question results, not a percentage of physics mastered."
+      ],
+      "references": []
+    },
+    {
+      "id": "skills",
+      "title": "Skills and transfer",
+      "summary": "Being able to recognize an answer is different from being able to use an idea.",
+      "paragraphs": [
+        "A skill is the ability to perform an action to a stated standard, such as explaining a result, solving a problem, or using an instrument. Transfer means applying knowledge or skill in a different situation.",
+        "The Physics pilot uses multiple-choice checks. They can sample recognition and reasoning about their questions. They do not establish free recall, a complete explanation, practical competence, or transfer to every new problem."
+      ],
+      "bullets": [
+        "A stronger future assessment would name a task, show an observable result, and state how it was judged.",
+        "GenBooks does not currently award a general skill or mastery certificate."
+      ],
+      "references": []
+    },
+    {
+      "id": "evidence",
+      "title": "Evidence and inference",
+      "summary": "Keep observations, self-reports, and conclusions separate.",
+      "paragraphs": [
+        "An observation is a recorded event: a reading marked finished, a question displayed, a submitted answer, or help opened. A self-report is what you tell the app, such as feeling that you learned something or finding a session enjoyable. An inference is a conclusion drawn from those records.",
+        "GenBooks records the conditions it can observe and any help you report. It cannot detect unreported assistance outside the app. Missing or damaged records are not treated as evidence of success.",
+        "Sources identify where information came from. A citation alone does not prove that a claim is supported, correct, current, or complete. AI review against a saved source checks support within that source, not truth beyond it."
+      ],
+      "bullets": [
+        "Reading, help, and self-reported learning add no Physics check points.",
+        "Unknown and incorrect both contribute zero points, but they remain different states.",
+        "No old answer is retrospectively turned into eligible scored evidence when its display and help history are unknown."
+      ],
+      "references": []
+    },
+    {
+      "id": "physics-score",
+      "title": "Physics check score",
+      "summary": "Ten question slots, each worth 10 points for its latest eligible correct answer.",
+      "paragraphs": [
+        "The score covers ten designated multiple-choice question slots across five Physics concepts. A slot contributes 10 points when its latest eligible answer is correct, and zero when it is incorrect or has no eligible answer. The total ranges from 0 to 100.",
+        "A new eligible correct answer adds 10 only if its slot was previously unknown or incorrect. A new eligible incorrect answer subtracts 10 only if that same slot was previously correct. Otherwise the score does not change. A later answer in a different slot does not erase the earlier slot.",
+        "The app shows how many slots have eligible results so that an incomplete record is distinguishable from an incorrect result. Time passing does not subtract points. Evidence older than 14 days receives an older-evidence label; that label is not a claim that it has been forgotten.",
+        "We use observed question slots so every change has an inspectable reason. An educational Elo rating can estimate learner ability and question difficulty as answers arrive, even without prior item calibration. With only 17 multiple-choice questions and sparse observations, this pilot does not yet separate general ability from difficulty, guessing, familiar answers, and recent study well enough to justify that rating. A larger reviewed bank and evaluation on later responses would support testing Elo in the future."
+      ],
+      "bullets": [
+        "Only the designated slots can score. Ordinary practice can still inform review suggestions.",
+        "The numbers and waiting periods are an inspectable product policy, not a scientifically established law of learning.",
+        "The score is an observed performance proxy, not a direct measurement of retained knowledge or a mastery percentage."
+      ],
+      "references": [
+        {
+          "title": "Educational Elo ratings — Pelánek (2016)",
+          "url": "https://www.fi.muni.cz/~xpelanek/publications/CAE-elo.pdf"
+        }
+      ]
+    },
+    {
+      "id": "eligible-checks",
+      "title": "When a check counts",
+      "summary": "A counted check needs a fresh review opportunity with recorded spacing and no help.",
+      "paragraphs": [
+        "Eligibility is recorded before the question is presented. The question must be one of the designated slots in review mode, at least 24 hours after recorded teaching or answer/help feedback for its concept, and at least seven days after that same question was last displayed when a prior display exists. Both exact boundaries qualify.",
+        "Only the first submitted answer for that presentation can count. Changing a selected option before saving is still one submission. Opening help or teaching, or displaying another question for the same concept, after presentation disqualifies the current check before it is saved. Report any outside help too.",
+        "At most one answer per concept can count in a 24-hour window, whether it was correct or incorrect. A migrated legacy record starts a new known baseline and must wait seven days; old attempts do not backfill points."
+      ],
+      "bullets": [
+        "An ineligible answer remains practice rather than scored evidence.",
+        "The app cannot verify that no unreported outside help was used.",
+        "A due review is a suggested activity, not a diagnosis that you have forgotten."
+      ],
+      "references": []
+    },
+    {
+      "id": "experience",
+      "title": "Enjoyment, effort, and preferences",
+      "summary": "A useful learning experience needs more than one signal.",
+      "paragraphs": [
+        "Enjoyment is a person's experience of an activity. The app records optional session feedback, not a continuously measured enjoyment stock or a hidden motivation score. Enjoyable, neutral, and too demanding are reports about a session, not units of knowledge.",
+        "Preferences describe choices or access needs, such as examples, readable text, audio, or a shorter session. They are not a diagnosis of a fixed learning style. Difficulty and effort can accompany learning, but frustration alone does not prove learning either.",
+        "Feedback can guide the next suggestion while answer evidence remains separate. A person can always choose a different reading or practice activity."
+      ],
+      "bullets": [
+        "Feeling that you learned and performing well later are different outcomes.",
+        "Changing a time preference does not rewrite the fixed Physics lessons.",
+        "No validated personal memory model or optimized learning-rate claim is implemented.",
+        "A latest too-demanding report can prioritize a brief reading for less than 24 hours. Older or future-dated feedback does not override due reviews; this is a product policy."
+      ],
+      "references": [
+        {
+          "title": "Feeling of learning and actual learning — Deslauriers et al.",
+          "url": "https://doi.org/10.1073/pnas.1821936116"
+        },
+        {
+          "title": "Learning Styles: Concepts and Evidence — Pashler et al.",
+          "url": "https://doi.org/10.1111/j.1539-6053.2009.01038.x"
+        }
+      ]
+    },
+    {
+      "id": "system-map",
+      "title": "The learning system map",
+      "summary": "A conceptual model of a person learning, alongside the app's recorded feedback loop.",
+      "paragraphs": [
+        "The map distinguishes the app feedback loop from human influences it does not fully observe. Retained knowledge and skills are persistent human capabilities, not a numerical amount the app can inspect. Changes in task performance do not by themselves prove changes in retained learning.",
+        "The app loop is concrete: an activity is suggested; the person chooses what to do; captured events and voluntary feedback become records; a rule proposes a next activity. The person may always choose something else.",
+        "The app observes only part of the human system. It does not infer willingness from inactivity or continuously estimate enjoyment. Forgetting describes less reliable access under later conditions, not demonstrated permanent erasure."
+      ],
+      "bullets": [
+        "K — Retained knowledge and skills: persistent understanding and learned capabilities; the app observes samples of performance, not K directly.",
+        "W — Willingness: inclination to participate, distinct from enjoyment, time available, or actual action. No numerical willingness field is measured.",
+        "P — Participation and choices: reading, responding, requesting help, switching, skipping, or stopping. A tap does not establish attention.",
+        "O — Recorded observations: saved events, dates, help conditions, answers, and self-reports, kept distinct.",
+        "R — Suggested activity: an option selected by a stated rule, not a compulsory or proven optimal assignment.",
+        "G — Goals, preferences, and circumstances: purposes, choices, time, interruptions, and other constraints. Only shared inputs reach the app.",
+        "F — Other experiences and retrieval conditions: outside learning, cues, context, or competing information. This is a collection of influences, not one quantity."
+      ],
+      "references": []
+    },
+    {
+      "id": "system-connections",
+      "title": "Every system-map connection",
+      "summary": "Twelve labeled relationships; a connection is not a measured effect.",
+      "paragraphs": [
+        "E01–E04 describe product relationships. E05–E12 describe possible human influences with no fixed sign or measured strength. The same letter always refers to the same box."
+      ],
+      "bullets": [
+        "E01 · G → R: shared goals and preferences inform suggestions or their wording. Unreported circumstances are unknown.",
+        "E02 · O → R: selected recorded evidence informs the implemented suggestion rule. A due review is not a failed test.",
+        "E03 · R → P: the app offers an activity; the person may choose, change, or decline it.",
+        "E04 · P → O: instrumented actions and submitted reports create records. Unobserved activity does not.",
+        "E05 · P → K: study and practice can change capability. Skipping is not a learning gain, and improvement is not guaranteed.",
+        "E06 · K → P: existing knowledge can affect comprehension and performance, alongside other influences.",
+        "E07 · F → K: other learning and relearning can change retained capability; an answer alone does not identify that change.",
+        "E08 · P → W: the experience can affect willingness to return. Its direction varies.",
+        "E09 · W → P: willingness can affect participation, but missing time or opportunity can prevent it.",
+        "E10 · G → P: goals and circumstances affect what is possible or chosen; an interruption can cause stopping.",
+        "E11 · G → W: relevance and circumstances can affect willingness, without implying a fixed learner type.",
+        "E12 · F → P: retrieval conditions can affect expressed performance without establishing a change in retained knowledge."
+      ],
+      "references": []
+    },
+    {
+      "id": "diagram-legend",
+      "title": "Legend",
+      "summary": "Read the arrow label before interpreting the relationship.",
+      "paragraphs": [
+        "A stock is a quantity or capacity that persists and can accumulate. A flow is a rate that changes a stock over time; an ordinary arrow is not automatically a flow. GenBooks' conceptual knowledge stock has no calibrated numerical unit or measured rate.",
+        "A feedback loop is a closed chain in which an outcome affects later input. A reinforcing loop can amplify a change; a balancing loop can oppose a change. Neither label means good or bad, and a loop does not guarantee an effect in a particular person.",
+        "A delay means an effect or observation occurs later than its cause. Waiting 24 hours or seven days is an eligibility rule; it does not establish the duration of memory formation or forgetting.",
+        "In a causal diagram, a plus sign means an increase in the cause tends to increase the effect, with other conditions held fixed. A minus sign means it tends to decrease it. Signs do not specify effect size, certainty, desirability, or points. In an architecture diagram, arrows describe data or actions instead; they have no causal sign."
+      ],
+      "bullets": [
+        "In the documented system map, the double-sided K box marks persistent capability; rounded P and R boxes mark an action or proposal; the cylindrical O box marks records; other rectangles mark state or context.",
+        "Solid labeled arrows E01–E04 describe product relationships. Dashed arrows E05–E12 describe possible human influences. None is a measured stock-flow transfer, and no causal plus/minus signs are assigned.",
+        "R → P → O → R is the app feedback loop. P → K → P and P → W → P are conceptual human loops, with no reinforcing or balancing classification asserted.",
+        "Enjoyment and willingness are not modeled as reservoirs. A voluntary session report is a recorded observation, not a continuous measure.",
+        "The architecture diagram uses a different legend: arrows name calls and data access, with no psychological causal signs."
+      ],
+      "references": []
+    },
+    {
+      "id": "app-boundary",
+      "title": "What GenBooks does today",
+      "summary": "Offline reading and a fixed learning pilot, with optional online AI.",
+      "paragraphs": [
+        "Library holds structured books. Reader presents saved text and preserves prior consumed chapter revisions. Notebook holds notes and saved words. Learning contains a fixed, original Physics course with separate local progress. These saved reading and learning activities work without AI or an account.",
+        "BookBot uses your configured provider key and sends selected reading context and your prompt to the provider when you ask. Its replies can use general model knowledge and are not independently source-verified. They do not silently become a verified lesson or change a scored answer.",
+        "Source-backed Create currently produces a reviewed opening preview from one retrieved source, with a limited selected-word continuation workflow. It is not a fully researched textbook generator. Retrieval or review failure keeps the candidate unpublished; it does not fabricate a source. Ordinary generation has different evidence limits.",
+        "The public project is a native iOS app with local storage. It has no shared account or learning backend, and no web, SMS, iMessage, or phone-call learning interface."
+      ],
+      "bullets": [
+        "DRM-free EPUB and text-based PDF imports become structured text; illustrations, equations, and layout may be lost. Scanned PDF pages are not OCR-transcribed.",
+        "New AI replies, generation, source retrieval, and uncached narration require their provider or network. Saved reading remains available if those services fail.",
+        "A saved source or AI support review is useful evidence, not a guarantee of factual correctness."
+      ],
+      "references": []
+    }
+  ]
+}

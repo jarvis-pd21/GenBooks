@@ -1,0 +1,46 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdata/
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.p12
+*.mobileprovision
+Secrets.plist
+**/APIKeys.swift
+**/Secrets.swift
+.keychain-export/
+
+# IDE
+.idea/
+*.swp
+*~
+
+# Local test/build evidence and generated project files
+artifacts/
+LivingReader.xcodeproj/
