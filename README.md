@@ -1,10 +1,32 @@
 # GenBooks
 
-**Read, understand, and remember.** GenBooks is a native iOS library and learning app with optional AI assistance.
+**Read, understand, and remember.** GenBooks is an open-source reading and learning app for the web and iPhone.
 
 Our mission is simple: **Increase retained knowledge and skills.** Our vision is a personal library that helps you reason from first principles, connect ideas across systems, and use what you learn later.
 
-## In the app
+## Open the web app
+
+**[genbooks.agi-jarvis.com](https://genbooks.agi-jarvis.com)**
+
+Read freely. Sign in with ChatGPT to sync your private imported books, notes, reading positions and Physics evidence across browsers. Begin with the original six-part Physics course; explore the mission, definitions, system map and learning science in Settings → Foundations.
+
+![GenBooks web library in dark appearance](docs/screenshots/web-library.png)
+
+The web code is in [`web/`](web/). See the [web README](web/README.md) for the architecture, local setup, privacy and exact limits. The native iPhone source remains at the repository root.
+
+| Capability | Web | Native iPhone |
+| --- | --- | --- |
+| Library, adjustable reading, notes and Words | Yes | Yes |
+| Fixed Physics course and transparent check score | Yes | Yes |
+| Sign-in and account sync across browsers | Yes | No |
+| Offline saved reading | No offline guarantee | Yes |
+| DRM-free imports | EPUB, TXT, Markdown; text only | EPUB and text-based PDF |
+| AI generation, BookBot, rewriting, narration | Not in this first web release | Optional provider-backed features |
+| Shared data between native and web | Not yet | Not yet |
+
+Both interfaces share the mission and original content. Their data stores are independent. Web sync requires a connection and the same ChatGPT account; appearance is saved separately in each browser. The web app sends no books to an AI provider.
+
+## In the native app
 
 Actual iPhone Simulator screens in light and dark appearance.
 
@@ -13,7 +35,7 @@ Actual iPhone Simulator screens in light and dark appearance.
 | <img src="docs/screenshots/library.png" alt="GenBooks Library in light appearance with the original Argentina sample" width="250"> | <img src="docs/screenshots/learning.png" alt="Learning in dark appearance with a suggested Physics reading and check-score status" width="250"> | <img src="docs/screenshots/foundations.png" alt="Foundations index showing the mission, vision and definitions" width="250"> |
 | Open a saved book and resume reading. | Read the fixed Physics course and inspect your check results. | Explore the mission, vision, and definitions. |
 
-## What is here
+## Native features
 
 - **Library and Reader:** locally saved books, Scroll and Pages reading, adjustable typography, reading position, bookmarks, and revision history.
 - **Notebook:** notes and saved words, with search and editing.
@@ -32,7 +54,7 @@ Saved reading and the fixed Physics course work offline. Opening a book does not
 4. Return later through **Review concept**, when suggested, or **Concepts → a concept → Practice this concept**. The question shows **Eligible for your check score** or **Practice only**, with the reason. Tap your score to inspect its evidence.
 5. Open **Foundations** from Learning or the **Settings** gear for the definitions, learning rationale, score policy, and legend.
 
-## Run locally
+## Run the native app locally
 
 Use macOS with **Xcode 26 or later**, an iOS Simulator runtime, and [XcodeGen](https://github.com/yonaskolb/XcodeGen). The complete test script also uses Python 3. The deployment target is iOS 18. The Xcode project is generated from `project.yml`; the internal target and scheme remain `LivingReader`.
 
@@ -57,12 +79,13 @@ Imports turn DRM-free EPUBs and text-based PDFs into structured text. Original l
 
 The reader protects consumed chapter revisions; selected-word continuation also preserves the prefix through the chosen word. “Consumed” is a recorded chapter state, not eye tracking or proof that every visible word was read. The source-backed workflow retrieves one source and reviews an opening preview against it. It does not research and verify an entire textbook.
 
-The app stores reading and learning data locally and has no account or shared sync backend. Web, SMS, iMessage, and phone-call interfaces are outside this project's current scope. See [data flow and privacy](docs/privacy.md).
+The native app stores reading and learning data locally and has no account or shared sync backend. The web app has its own account storage, described in the [web README](web/README.md). SMS, iMessage and phone-call learning interfaces are outside this release. See [data flow and privacy](docs/privacy.md).
 
 ## Documentation
 
 | Read | Purpose |
 | --- | --- |
+| [Web app](web/README.md) | Features, account sync, local setup, limits and privacy |
 | [Foundations](docs/foundations.md) | Mission, definitions, system map, complete diagram legend, evidence limits |
 | [Physics check score](docs/physics-score.md) | Exact points, eligibility, migration, and examples |
 | [Architecture](docs/architecture.md) | Components, storage, imports, AI, and failure behavior |

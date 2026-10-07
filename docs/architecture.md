@@ -1,5 +1,7 @@
 # Architecture
 
+This page describes the native iPhone app. For the public web app and its separate account storage, see the [web documentation](../web/README.md).
+
 GenBooks is a native SwiftUI app with a UIKit/TextKit reader. Books and learning records are stored locally. Optional online services author new material or answer questions; they are not dependencies of opening saved text.
 
 ## Component map

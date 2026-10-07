@@ -1,5 +1,7 @@
 # Design
 
+This page describes the native iPhone app. For the public web app and its separate account storage, see the [web documentation](../web/README.md).
+
 GenBooks organizes reading and learning around three jobs: choose something to read, continue a learning path, and revisit saved material. The interface makes the next action easy to find while keeping explanations, sources, and settings reachable. These are design intentions, not measured improvements in learning or enjoyment.
 
 ## Navigation and hierarchy

@@ -1,0 +1,1348 @@
+{
+  "schemaVersion": 1,
+  "id": "physics-foundations-v1",
+  "title": "A Few Ways to See the Physical World",
+  "subtitle": "Six short readings about motion, conservation, and the direction of change",
+  "language": "en",
+  "authorship": "Original GenBooks learning unit, drafted and reviewed by AI against the cited references. It has not been independently reviewed by a human physics educator.",
+  "notAnEditionOf": "This is not Richard Feynman’s The Character of Physical Law, an adaptation of its text, or a substitute edition of that book.",
+  "audience": "An interested adult comfortable with multiplication and division; no calculus assumed.",
+  "readingFirst": true,
+  "allRequiredContentOffline": true,
+  "completionMeaning": "Finishing the readings records participation, not demonstrated mastery.",
+  "runtimeCompatibility": {
+    "inspectedModel": "Core/Models/ContentBlock.swift",
+    "supportedKinds": [
+      "paragraph",
+      "heading",
+      "quote",
+      "callout",
+      "imagePlaceholder"
+    ],
+    "kindsUsed": [
+      "paragraph",
+      "callout"
+    ],
+    "equationRendering": "Plain Unicode text only; every expression is also explained in words.",
+    "requiredImages": [],
+    "diagramRendering": "No native diagram block exists in the inspected model. Opportunities below are optional future assets; no missing image placeholders belong in the initial reading.",
+    "integrationNote": "Proposal IDs are stable strings. Root may map them to stable UUIDs in Book/Chapter/ChapterRevision/ContentBlock. Do not append check answers to the main reading before a reader chooses a check."
+  },
+  "rights": {
+    "proseAndQuestions": "Original wording, examples, and question sets drafted for this unit; no external passages, exercises, illustrations, or Feynman text reproduced.",
+    "sourceUsage": "References support factual checking and further reading. Source URLs and rights notes are retained; complete source texts are not bundled.",
+    "governmentMediaPolicyUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "openstaxLicenseUrl": "https://openstax.org/books/university-physics-volume-1/pages/preface",
+    "thirdPartyAssetCount": 0,
+    "licenseCaveat": "Do not replace this original unit with copied OpenStax or Feynman text, or add source images, without a separate rights decision."
+  },
+  "sources": [
+    {
+      "id": "nist-uncertainty",
+      "title": "NIST: Basic definitions of uncertainty",
+      "url": "https://physics.nist.gov/cuu/Uncertainty/basic.html",
+      "passagePointer": "Definition of measurement uncertainty and the distinction between error and uncertainty.",
+      "supports": "Measured values have uncertainty; uncertainty is not the same as known error.",
+      "sourceClass": "US government scientific institution",
+      "rights": "Factual reference only. No prose, figures, or tables copied."
+    },
+    {
+      "id": "openstax-models",
+      "title": "OpenStax University Physics Volume 1, 1.1",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/1-1-the-scope-and-scale-of-physics",
+      "passagePointer": "Building Models: observation, experimental testing, and domains of applicability.",
+      "supports": "Models have assumptions and domains; predictions are compared with observations.",
+      "sourceClass": "Publisher textbook, authors Moebs, Ling, and Sanny",
+      "rights": "Current page reports CC BY-NC-SA 4.0 and separate restrictions on AI reuse. Link for factual reference only; no source prose, exercises, images, or tables reproduced or adapted."
+    },
+    {
+      "id": "nasa-newton",
+      "title": "NASA Glenn: Newton's Laws of Motion",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "passagePointer": "Newton's First Law: Inertia; Newton's Second Law: Force; Newton's Third Law: Action & Reaction.",
+      "supports": "Zero net force implies constant velocity in an inertial frame; net force equals mass times acceleration for constant mass; interaction forces are equal and opposite.",
+      "sourceClass": "US government educational resource",
+      "rights": "Factual reference only; no source prose or imagery reproduced. NASA media policy has third-party exceptions; no blanket license for every page asset is asserted.",
+      "qualification": "Use net force, constant mass, and an inertial reference frame. Do not repeat the page wording that a change in velocity generates a force, or apply a fixed-mass formula naively to an open rocket system."
+    },
+    {
+      "id": "nasa-momentum",
+      "title": "NASA Glenn: Conservation of Momentum",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/conservation-of-momentum-2/",
+      "passagePointer": "Conservation of Momentum Summary and the paragraph defining momentum as mass times velocity.",
+      "supports": "Momentum includes direction; internal interactions redistribute it. A fixed collection of objects has equal initial and final total momentum when net external impulse over the interval is zero.",
+      "sourceClass": "US government educational resource",
+      "rights": "Factual reference only; all worked examples below are original."
+    },
+    {
+      "id": "openstax-momentum",
+      "title": "OpenStax University Physics Volume 1, 9.3",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/9-3-conservation-of-linear-momentum",
+      "passagePointer": "Conservation of Momentum: conditions for an isolated system and definition of external force.",
+      "supports": "The system boundary determines which forces are internal and whether momentum conservation applies.",
+      "sourceClass": "Publisher textbook",
+      "rights": "Factual cross-check only. Current source CC BY-NC-SA 4.0; no copied or adapted prose, exercise, figure, or table."
+    },
+    {
+      "id": "nasa-energy",
+      "title": "NASA Glenn: Conservation of Energy",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/conservation-of-energy/",
+      "passagePointer": "Opening conservation statement and first-law equation E2 - E1 = Q - W.",
+      "supports": "Energy can change form or cross a boundary; the energy balance must include transfers.",
+      "sourceClass": "US government educational resource",
+      "rights": "Factual reference only; no copied prose or imagery.",
+      "qualification": "An arbitrary subsystem need not have constant energy. The unit states the no-transfer condition explicitly."
+    },
+    {
+      "id": "nasa-energy-formulas",
+      "title": "NASA Glenn: Energy Activity, Background",
+      "url": "https://www.grc.nasa.gov/WWW/k-12/BGA/Mike/energy_act.htm",
+      "passagePointer": "Background: near-Earth gravitational potential energy mgh and kinetic energy mv²/2.",
+      "supports": "The classical translational kinetic-energy formula and the constant-g gravitational potential-energy change.",
+      "sourceClass": "US government-hosted educational resource",
+      "rights": "Factual reference only; none of the page exercises, wording, or images is reproduced. Government hosting alone is not treated as a license for contributed material.",
+      "qualification": "Use speed for the squared magnitude of velocity; mgh is a change relative to a chosen height, in a region where g is approximately constant. Rotational kinetic energy is additional."
+    },
+    {
+      "id": "nasa-internal-energy",
+      "title": "NASA Glenn: First Law – Internal Energy",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/first-law-internal-energy/",
+      "passagePointer": "Internal energy as a state variable; heat and work as transfers rather than stored state quantities.",
+      "supports": "Distinguish internal energy from heat transfer; include mechanical and internal energy in an energy balance.",
+      "sourceClass": "US government educational resource",
+      "rights": "Factual reference only; no copied prose or imagery."
+    },
+    {
+      "id": "openstax-energy",
+      "title": "OpenStax University Physics Volume 1, 8.2",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/8-2-conservative-and-non-conservative-forces",
+      "passagePointer": "Non-Conservative Forces: friction and the distinction between mechanical-energy change and total energy conservation.",
+      "supports": "Kinetic plus potential energy need not be conserved when friction is involved.",
+      "sourceClass": "Publisher textbook",
+      "rights": "Factual cross-check only. Current source CC BY-NC-SA 4.0; no copied or adapted prose, exercise, figure, or table."
+    },
+    {
+      "id": "nasa-thermodynamics",
+      "title": "NASA Glenn: What is Thermodynamics?",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/what-is-thermodynamics-1/",
+      "passagePointer": "Final paragraph: total entropy of system plus environment, reversible and irreversible processes.",
+      "supports": "Energy conservation alone does not determine the direction of heat flow; total entropy does not decrease for an isolated composite system.",
+      "sourceClass": "US government educational resource",
+      "rights": "Factual reference only; no copied prose or imagery."
+    },
+    {
+      "id": "openstax-entropy",
+      "title": "OpenStax University Physics Volume 2, 4.6",
+      "url": "https://openstax.org/books/university-physics-volume-2/pages/4-6-entropy",
+      "passagePointer": "Opening definition, Equation 4.8 (reversible, constant-temperature transfer), and Example 4.5 discussion of an imagined reversible path.",
+      "supports": "Entropy is a state quantity; ΔS = Qrev/T requires a reversible, constant-temperature path. A subsystem can lose entropy while total entropy increases.",
+      "sourceClass": "Publisher textbook, authors Ling, Moebs, and Sanny",
+      "rights": "Factual cross-check only. Current source CC BY-NC-SA 4.0; no copied or adapted prose, exercise, figure, or table.",
+      "qualification": "Use isolated, not merely closed, for a system whose entropy cannot decrease. A closed system may exchange heat and lose entropy."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "models",
+      "title": "Models and evidence",
+      "prerequisiteIds": [],
+      "objectives": [
+        "Identify a prediction, its assumptions, and an observation that could challenge it.",
+        "Treat measurement uncertainty as part of a comparison, not as proof of failure."
+      ],
+      "boundaries": "An introductory reasoning habit, not a complete account of scientific inference or uncertainty analysis.",
+      "objective": "Identify a prediction, its assumptions, and an observation that could challenge it. Treat measurement uncertainty as part of a comparison, not as proof of failure."
+    },
+    {
+      "id": "force",
+      "title": "Net force and changing motion",
+      "prerequisiteIds": [
+        "models"
+      ],
+      "objectives": [
+        "Distinguish velocity from acceleration.",
+        "Infer whether net force is zero from constant velocity, including its direction.",
+        "Apply net force = mass × acceleration to a constant-mass object."
+      ],
+      "boundaries": "Ordinary Newtonian motion in an inertial frame; not relativistic, quantum, or variable-mass motion.",
+      "objective": "Distinguish velocity from acceleration. Infer whether net force is zero from constant velocity, including its direction. Apply net force = mass × acceleration to a constant-mass object."
+    },
+    {
+      "id": "momentum",
+      "title": "Momentum and system boundaries",
+      "prerequisiteIds": [
+        "force"
+      ],
+      "objectives": [
+        "Include direction when adding momentum.",
+        "Choose the objects in a system and identify external interactions.",
+        "Predict a one-dimensional shared velocity when objects stick and external impulse is negligible."
+      ],
+      "boundaries": "Fixed-mass systems, speeds far below light, and simple one-dimensional examples.",
+      "objective": "Include direction when adding momentum. Choose the objects in a system and identify external interactions. Predict a one-dimensional shared velocity when objects stick and external impulse is negligible."
+    },
+    {
+      "id": "energy",
+      "title": "Energy accounting",
+      "prerequisiteIds": [
+        "models"
+      ],
+      "objectives": [
+        "Distinguish total energy conservation from conservation of kinetic or mechanical energy.",
+        "Track transfer or conversion when an object slows or falls.",
+        "Use the speed-squared dependence of kinetic energy."
+      ],
+      "boundaries": "Classical kinetic energy, near-Earth gravitational energy changes, and macroscopic energy accounting.",
+      "objective": "Distinguish total energy conservation from conservation of kinetic or mechanical energy. Track transfer or conversion when an object slows or falls. Use the speed-squared dependence of kinetic energy."
+    },
+    {
+      "id": "entropy",
+      "title": "Direction of change",
+      "prerequisiteIds": [
+        "energy"
+      ],
+      "objectives": [
+        "Explain why conserving energy does not make every imagined process possible.",
+        "Apply the second law to a system together with its surroundings, rather than every part separately.",
+        "Distinguish energy conservation from the ability to recover useful work in a given environment."
+      ],
+      "boundaries": "Macroscopic thermodynamics; no claim that entropy means visual messiness or that tiny fluctuations are impossible.",
+      "objective": "Explain why conserving energy does not make every imagined process possible. Apply the second law to a system together with its surroundings, rather than every part separately. Distinguish energy conservation from the ability to recover useful work in a given environment."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "physics-01",
+      "title": "A rule that risks being wrong",
+      "conceptIds": [
+        "models"
+      ],
+      "openingQuestion": "What turns a plausible story into a useful piece of physics?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "A suitcase rolls across a station floor. You could tell a story about why it moves, but physics asks for something sharper: what will happen next, and how could we find out? A useful explanation makes a prediction that the world is allowed to contradict.",
+          "sourceIds": [],
+          "id": "physics-01-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "Start with a deliberately simple model: during a short interval, the suitcase moves straight ahead at a constant speed of 1 meter per second. A model is a representation that keeps selected features and leaves others out. This one ignores little bumps and changes in your pull. It predicts 3 meters of travel in 3 seconds. The arithmetic is simple because the assumptions did some of the work.",
+          "sourceIds": [
+            "openstax-models"
+          ],
+          "id": "physics-01-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "callout",
+          "text": "Distance traveled = speed × elapsed time, when speed stays constant.",
+          "sourceIds": [],
+          "id": "physics-01-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "Now measure. Perhaps the distance comes out as 2.9 meters. That difference does not instantly destroy the model. Your start and stop times may be imprecise; the speed may have drifted; the wheels may have crossed a joint. Measurement uncertainty describes the range of values reasonably supported by the measurement, given its limitations. It is not a license to ignore every disagreement.",
+          "sourceIds": [
+            "nist-uncertainty"
+          ],
+          "id": "physics-01-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "paragraph",
+          "text": "A useful next move is to repeat the measurement, improve the timing, and check whether the discrepancy is bigger than those limitations can explain. If a clear, repeatable slowing remains, change the model to include changing speed. Making assumptions visible tells you what to investigate rather than inviting you to defend the original story at all costs.",
+          "sourceIds": [
+            "openstax-models",
+            "nist-uncertainty"
+          ],
+          "id": "physics-01-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "A physical law describes a well-supported relationship. A model uses such relationships together with assumptions about a particular situation. An idealized model can be excellent for one question and inadequate for another. A straight-line motion model may predict when luggage reaches a doorway while saying nothing useful about the rattling wheel.",
+          "sourceIds": [
+            "openstax-models"
+          ],
+          "id": "physics-01-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "The rest of this short book uses ordinary objects at speeds far below the speed of light. We will ask what changes motion, what stays constant, and why a change can conserve energy yet have a preferred direction. At each step, keep one quiet question nearby: under what conditions is this statement supposed to work?",
+          "sourceIds": [],
+          "id": "physics-01-block-07",
+          "orderIndex": 6
+        }
+      ],
+      "checks": [
+        {
+          "id": "model-now-1",
+          "type": "singleChoice",
+          "conceptId": "models",
+          "conceptIds": [
+            "models"
+          ],
+          "prompt": "A model says a moving cart travels at a constant 2 meters per second. How far does it predict the cart travels in 3 seconds?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "1.5 meters"
+            },
+            {
+              "id": "b",
+              "text": "5 meters"
+            },
+            {
+              "id": "c",
+              "text": "6 meters"
+            }
+          ],
+          "correctChoiceId": "c",
+          "explanation": "At constant speed, distance = speed × time: 2 × 3 = 6 meters. This is a prediction conditional on the speed staying constant.",
+          "misconception": "Combining quantities without attending to the model or their units.",
+          "misconceptionChecked": "Combining quantities without attending to the model or their units.",
+          "sourceIds": [
+            "openstax-models"
+          ],
+          "answerVerification": "Independent dimensional check: (meters/second) × seconds = meters; 2 × 3 = 6.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "model-now-2",
+          "type": "singleChoice",
+          "conceptId": "models",
+          "conceptIds": [
+            "models"
+          ],
+          "prompt": "One measurement differs slightly from a prediction. What is the best next step?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Declare the model disproved immediately."
+            },
+            {
+              "id": "b",
+              "text": "Check the assumptions and measurement uncertainty, then repeat the comparison."
+            },
+            {
+              "id": "c",
+              "text": "Ignore the result because models are always approximate."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "A discrepancy deserves investigation. Repetition, uncertainty estimates, and checking assumptions help distinguish a meaningful failure from measurement limitations. Neither automatic rejection nor automatic dismissal is justified.",
+          "misconception": "A single small mismatch either refutes a model outright or never matters.",
+          "misconceptionChecked": "A single small mismatch either refutes a model outright or never matters.",
+          "sourceIds": [
+            "nist-uncertainty",
+            "openstax-models"
+          ],
+          "answerVerification": "Logical check: the evidence stated does not quantify uncertainty or confirm the assumptions, so only further comparison is warranted.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "Choose something that moves near you. What simple prediction could you make, and which assumption would be easiest to check?",
+      "wordCountReading": 349
+    },
+    {
+      "id": "physics-02",
+      "title": "Motion does not need a motor",
+      "conceptIds": [
+        "force"
+      ],
+      "openingQuestion": "If the push stops, why should motion stop?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Slide a book across a table and it slows. Everyday experience therefore tempts us to think that motion requires a continuing push. But the tabletop is still acting on the book: friction opposes its sliding. The book is not showing us motion without a force. It is showing us motion while a force changes it.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "Imagine making the surface smoother and reducing air resistance. The same initial motion lasts longer. Newton’s first law takes this idea to its clean limit: when the forces on an object add to zero, its velocity stays constant. Velocity includes both speed and direction. The object may be stationary, or it may move steadily along a straight line.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "paragraph",
+          "text": "Net force means the combined force on the object, including direction. It is possible to have several forces and a net force of zero. A book resting on a table is pulled downward by Earth and supported upward by the table; those forces balance. Zero net force does not mean no interactions.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "Acceleration means a change in velocity per unit time. Speeding up counts. Slowing down counts. Turning at a steady speed also counts, because the direction changes. A car going around a bend needs a sideways component of net force even if its speedometer reading stays fixed.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "callout",
+          "text": "Net force = mass × acceleration. For a constant mass, greater net force produces greater acceleration.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "For example, a net force of 6 newtons on a 3-kilogram cart gives an acceleration of 2 meters per second each second. If that net force stays constant and points along the cart’s motion, its speed increases by 2 meters per second during each second. The acceleration is not the speed; it tells you how the velocity changes.",
+          "sourceIds": [],
+          "id": "physics-02-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "These statements use an inertial reference frame: a viewpoint in which an object with no net force moves at constant velocity. A non-accelerating laboratory is a good approximation for our examples. From inside a braking bus, objects can appear to lurch forward; the accelerating viewpoint matters. We will keep our viewpoint fixed to the laboratory so the force accounting stays clear.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-02-block-07",
+          "orderIndex": 6
+        }
+      ],
+      "checks": [
+        {
+          "id": "force-now-1",
+          "type": "singleChoice",
+          "conceptId": "force",
+          "conceptIds": [
+            "force"
+          ],
+          "prompt": "A cart moves east in a straight line at a constant speed. In the laboratory frame, what is its net force?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Eastward, because it is moving east."
+            },
+            {
+              "id": "b",
+              "text": "Zero, because its velocity is not changing."
+            },
+            {
+              "id": "c",
+              "text": "Westward, because all moving objects slow down."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "Constant velocity means zero acceleration. For a constant-mass cart in this inertial laboratory frame, its net force is zero. Individual forces may still be present and balance.",
+          "misconception": "Force is needed to sustain velocity rather than to change it.",
+          "misconceptionChecked": "Force is needed to sustain velocity rather than to change it.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "answerVerification": "Use a = 0, therefore F_net = m × 0 = 0.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "force-now-2",
+          "type": "singleChoice",
+          "conceptId": "force",
+          "conceptIds": [
+            "force"
+          ],
+          "prompt": "A car travels around a circular track at a constant speed. Is it accelerating?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "No; its speed is constant."
+            },
+            {
+              "id": "b",
+              "text": "Only if the driver presses the accelerator pedal."
+            },
+            {
+              "id": "c",
+              "text": "Yes; its direction of motion changes."
+            }
+          ],
+          "correctChoiceId": "c",
+          "explanation": "Acceleration is change in velocity, and velocity includes direction. Circular motion changes that direction even at constant speed.",
+          "misconception": "Acceleration means only an increase in speed.",
+          "misconceptionChecked": "Acceleration means only an increase in speed.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "answerVerification": "Two velocity vectors at different positions on the circle have equal magnitudes but different directions; their difference is nonzero.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "A train moves steadily along a straight track. Which everyday signs would tell you it has begun accelerating rather than merely moving?",
+      "wordCountReading": 346
+    },
+    {
+      "id": "physics-03",
+      "title": "Draw a boundary around the push",
+      "conceptIds": [
+        "momentum"
+      ],
+      "openingQuestion": "How can two objects change their motion while their total stays the same?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Two people on low-friction carts push apart. Each cart changes velocity, but neither person supplied a push from outside the pair. The clue is to change the question. Instead of following one cart alone, follow both carts together.",
+          "sourceIds": [
+            "nasa-momentum"
+          ],
+          "id": "physics-03-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "A system is the collection of objects you choose to study. For the two-cart system, the pushes between the people are internal interactions. A shove from a bystander would be external. Drawing this boundary is not a formality: it determines whether the quantity you track can enter or leave through an interaction with the surroundings.",
+          "sourceIds": [
+            "openstax-momentum"
+          ],
+          "id": "physics-03-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "callout",
+          "text": "Momentum = mass × velocity. For a fixed collection of objects, initial and final total momentum are equal when the net external impulse over the interval is zero.",
+          "sourceIds": [
+            "nasa-momentum"
+          ],
+          "id": "physics-03-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "Impulse is the accumulated effect of a force over an interval of time. Here we can take horizontal external forces to be negligible during the brief push. The two internal forces are equal and opposite and act for the same interval, so the changes in the two carts’ momenta cancel. If their total momentum started at zero, it remains zero even though both are now moving.",
+          "sourceIds": [
+            "nasa-newton",
+            "nasa-momentum"
+          ],
+          "id": "physics-03-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "paragraph",
+          "text": "Direction matters. Call rightward positive. Suppose one person and cart have a combined mass of 40 kilograms and move right at 1 meter per second. Their momentum is +40 kilogram-meters per second. If the other person and cart have a mass of 80 kilograms, they must move left at 0.5 meters per second to have momentum −40. Equal and opposite momenta do not require equal speeds.",
+          "sourceIds": [],
+          "id": "physics-03-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "The same accounting handles a collision. A 2-kilogram trolley moving right at 3 meters per second sticks to a stationary 1-kilogram trolley. If the external impulse is negligible, the initial momentum is 6 kilogram-meters per second. Afterward, the combined 3 kilograms must move right at 2 meters per second. We predicted the shared motion without knowing the detailed forces while the bumpers compressed.",
+          "sourceIds": [],
+          "id": "physics-03-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "Notice the limit: the momentum of one trolley is not conserved during that collision. The other trolley exerts an external force on it. Conservation applies to the chosen pair because their mutual forces are internal and the remaining external impulse is negligible. Always name the system before saying that something is conserved.",
+          "sourceIds": [
+            "openstax-momentum"
+          ],
+          "id": "physics-03-block-07",
+          "orderIndex": 6
+        }
+      ],
+      "checks": [
+        {
+          "id": "momentum-now-1",
+          "type": "singleChoice",
+          "conceptId": "momentum",
+          "conceptIds": [
+            "momentum"
+          ],
+          "prompt": "Two carts start at rest and push apart with negligible external impulse. Their masses are 30 kilograms and 60 kilograms. Which moves faster afterward?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "The 30-kilogram cart, at twice the other cart’s speed."
+            },
+            {
+              "id": "b",
+              "text": "The 60-kilogram cart, at twice the other cart’s speed."
+            },
+            {
+              "id": "c",
+              "text": "Both must have the same speed."
+            }
+          ],
+          "correctChoiceId": "a",
+          "explanation": "Their momenta must be equal in magnitude and opposite in direction. Because momentum is mass × velocity, the cart with half the mass needs twice the speed.",
+          "misconception": "Equal interaction forces imply equal speeds for unequal masses.",
+          "misconceptionChecked": "Equal interaction forces imply equal speeds for unequal masses.",
+          "sourceIds": [
+            "nasa-momentum",
+            "nasa-newton"
+          ],
+          "answerVerification": "30 × v_light = 60 × v_heavy, so v_light / v_heavy = 2.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "momentum-now-2",
+          "type": "singleChoice",
+          "conceptId": "momentum",
+          "conceptIds": [
+            "momentum"
+          ],
+          "prompt": "During a collision between two trolleys, which choice is the relevant system for conserving their combined momentum when other horizontal forces are negligible?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Only the trolley that was moving first."
+            },
+            {
+              "id": "b",
+              "text": "Only the trolley that was initially stationary."
+            },
+            {
+              "id": "c",
+              "text": "Both trolleys together."
+            }
+          ],
+          "correctChoiceId": "c",
+          "explanation": "The collision forces are internal to the two-trolley system. Either trolley alone receives an external impulse from the other, so its own momentum changes.",
+          "misconception": "Momentum conservation applies separately to each interacting object.",
+          "misconceptionChecked": "Momentum conservation applies separately to each interacting object.",
+          "sourceIds": [
+            "openstax-momentum"
+          ],
+          "answerVerification": "Internal force pairs cancel in the sum over the two trolleys; they do not cancel for either trolley alone.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "For a person catching a ball, what changes when you draw the system boundary around the ball alone versus the person and ball together?",
+      "wordCountReading": 368
+    },
+    {
+      "id": "physics-04",
+      "title": "Where the motion went",
+      "conceptIds": [
+        "energy"
+      ],
+      "openingQuestion": "When an object stops moving, what has actually disappeared?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "A bicycle rolls to a stop as its brakes warm. The obvious motion has disappeared, but the energy has not vanished. Energy is a quantity we account for across changes: it can be transferred between objects or converted among forms. If no energy crosses a system’s boundary, its total remains constant. For a subsystem such as the bicycle alone, transfers across the boundary must be included.",
+          "sourceIds": [
+            "nasa-energy"
+          ],
+          "id": "physics-04-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "Kinetic energy is the energy associated with motion. For a non-spinning object moving much slower than light, it is one half of its mass times its speed squared. That square matters. Doubling speed gives four times the kinetic energy, while doubling mass at the same speed gives twice the kinetic energy. A spinning object also has energy associated with its rotation.",
+          "sourceIds": [
+            "nasa-energy-formulas"
+          ],
+          "id": "physics-04-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "callout",
+          "text": "Kinetic energy = ½ × mass × speed². The unit is the joule: 1 joule = 1 kilogram × meter²/second².",
+          "sourceIds": [
+            "nasa-energy-formulas"
+          ],
+          "id": "physics-04-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "Energy can also be associated with the arrangement of interacting objects. Lift a weight near Earth’s surface and you increase the gravitational potential energy of the Earth–weight system. For a small height change where gravitational acceleration g is approximately constant, the increase is mass × g × height gained. If the weight falls freely with negligible air resistance, that increase can be converted into kinetic energy.",
+          "sourceIds": [
+            "nasa-energy-formulas"
+          ],
+          "id": "physics-04-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "paragraph",
+          "text": "Consider a 1-kilogram block that slides without rotating and descends 1 meter. Use g ≈ 10 meters per second squared for easy arithmetic. The gravitational potential energy decreases by about 10 joules. If its kinetic energy rises by only 7 joules, the remaining 3 joules need an explanation. They might appear as internal energy in the block and track or energy carried away by sound. A shortfall in one category is a reason to expand the accounting, not to quietly delete energy.",
+          "sourceIds": [
+            "nasa-energy-formulas"
+          ],
+          "id": "physics-04-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "Internal energy includes the microscopic motion and interactions inside matter. Friction can turn coordinated motion into an increase in internal energy. Heat is energy transferred because of a temperature difference; it is not a separate substance stored inside an object. Once the brakes become warmer than the surrounding air, energy can leave them through heat transfer.",
+          "sourceIds": [
+            "nasa-internal-energy"
+          ],
+          "id": "physics-04-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "Mechanical energy usually means kinetic plus potential energy. It need not stay constant when friction or deformation matters. Total energy conservation is the broader statement. This distinction explains how the sticking trolleys in the previous lesson can conserve momentum while losing some kinetic energy: deformation and internal motion receive part of the energy budget.",
+          "sourceIds": [
+            "openstax-energy"
+          ],
+          "id": "physics-04-block-07",
+          "orderIndex": 6
+        }
+      ],
+      "checks": [
+        {
+          "id": "energy-now-1",
+          "type": "singleChoice",
+          "conceptId": "energy",
+          "conceptIds": [
+            "energy"
+          ],
+          "prompt": "The same cart moves at 4 meters per second instead of 2 meters per second. How does its kinetic energy change?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "It doubles."
+            },
+            {
+              "id": "b",
+              "text": "It becomes four times as large."
+            },
+            {
+              "id": "c",
+              "text": "It stays the same because mass is unchanged."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "Kinetic energy is proportional to speed squared. The ratio is 4²/2² = 16/4 = 4.",
+          "misconception": "Kinetic energy grows in direct proportion to speed.",
+          "misconceptionChecked": "Kinetic energy grows in direct proportion to speed.",
+          "sourceIds": [
+            "nasa-energy-formulas"
+          ],
+          "answerVerification": "Independent ratio calculation using K = mv²/2; fixed mass cancels.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "energy-now-2",
+          "type": "singleChoice",
+          "conceptId": "energy",
+          "conceptIds": [
+            "energy"
+          ],
+          "prompt": "A block slides to rest on a rough floor. What is the best energy explanation?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Its kinetic energy is destroyed."
+            },
+            {
+              "id": "b",
+              "text": "Its kinetic energy must remain unchanged because total energy is conserved."
+            },
+            {
+              "id": "c",
+              "text": "Energy is transferred or converted into internal energy and other forms in the block and surroundings."
+            }
+          ],
+          "correctChoiceId": "c",
+          "explanation": "The block’s kinetic energy decreases. Friction and deformation change the energy distribution, while the full accounting across the block and its surroundings still conserves energy.",
+          "misconception": "Conservation of total energy requires conservation of kinetic energy.",
+          "misconceptionChecked": "Conservation of total energy requires conservation of kinetic energy.",
+          "sourceIds": [
+            "nasa-energy",
+            "nasa-internal-energy",
+            "openstax-energy"
+          ],
+          "answerVerification": "The mechanical-energy loss is matched by other energy changes and transfers when the full system is included.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "Choose a device that becomes warm during use. What forms of energy enter, and where does that energy go?",
+      "wordCountReading": 405
+    },
+    {
+      "id": "physics-05",
+      "title": "Why the warm mug cools",
+      "conceptIds": [
+        "entropy"
+      ],
+      "openingQuestion": "If energy is conserved, why does nature favor one direction of change?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Put a warm mug in a cooler room and it tends to cool. You do not see the room spontaneously send energy into the mug so that the room gets cooler and the mug gets hotter. Yet that imagined reversal could still conserve energy: whatever one lost, the other could gain. Conservation alone leaves something out.",
+          "sourceIds": [
+            "nasa-thermodynamics"
+          ],
+          "id": "physics-05-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "The missing constraint is the second law of thermodynamics. It uses entropy, a measurable property of a system’s state. For an isolated system—one that exchanges neither matter nor energy with its surroundings—total entropy cannot decrease in an ordinary macroscopic process. It increases in irreversible processes and stays constant in the ideal reversible limit.",
+          "sourceIds": [
+            "nasa-thermodynamics",
+            "openstax-entropy"
+          ],
+          "id": "physics-05-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "paragraph",
+          "text": "Entropy is more precise than everyday messiness. One way to calculate an entropy change is to imagine a reversible transfer of heat: at a constant absolute temperature, divide the heat received by that temperature. Absolute temperature is measured in kelvin. A reversible process is an ideal limit that could be undone while restoring both the system and its surroundings, without a lasting change elsewhere.",
+          "sourceIds": [
+            "openstax-entropy"
+          ],
+          "id": "physics-05-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "The mug and room illustrate why temperature matters. Energy leaving a warmer object reduces its entropy; the same energy entering a cooler object increases that object’s entropy by more. The combined entropy therefore increases. The mug’s entropy can fall without violating the law, because the mug is exchanging energy with the room. The rule concerns the full accounting, not every part separately.",
+          "sourceIds": [
+            "nasa-thermodynamics",
+            "openstax-entropy"
+          ],
+          "id": "physics-05-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "paragraph",
+          "text": "A refrigerator does move energy from a cooler interior to a warmer room, but it requires work, usually supplied electrically. It releases into the room both the energy removed from inside and the energy supplied to run it. Restoring a local temperature difference is possible; doing it without any compensating effect elsewhere is the problem.",
+          "sourceIds": [],
+          "id": "physics-05-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "This also sharpens what we mean when we say energy is “used up.” Energy remains, but after motion has been dispersed into a nearly uniform warm environment, it is harder to recover as useful work in that environment. A temperature difference provides an opportunity to run a heat engine. Once that difference is gone, conservation does not promise that the same opportunity remains.",
+          "sourceIds": [
+            "nasa-thermodynamics"
+          ],
+          "id": "physics-05-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "Keep the two questions separate: energy accounting asks how much energy there is and where it went. Entropy helps determine which changes are possible without additional effects. The ordinary direction of cooling is not evidence that energy disappears.",
+          "sourceIds": [],
+          "id": "physics-05-block-07",
+          "orderIndex": 6
+        }
+      ],
+      "checks": [
+        {
+          "id": "entropy-now-1",
+          "type": "singleChoice",
+          "conceptId": "entropy",
+          "conceptIds": [
+            "entropy"
+          ],
+          "prompt": "A warm mug cools in a cooler room. Can the mug’s own entropy decrease?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Yes; the surroundings gain entropy, and the combined total increases."
+            },
+            {
+              "id": "b",
+              "text": "No; the entropy of every object must increase at all times."
+            },
+            {
+              "id": "c",
+              "text": "Yes, because cooling destroys energy."
+            }
+          ],
+          "correctChoiceId": "a",
+          "explanation": "The mug is not isolated. It transfers energy to its cooler surroundings, and its entropy can decrease while the total entropy of mug plus surroundings increases.",
+          "misconception": "The second law requires each subsystem’s entropy to rise.",
+          "misconceptionChecked": "The second law requires each subsystem’s entropy to rise.",
+          "sourceIds": [
+            "nasa-thermodynamics",
+            "openstax-entropy"
+          ],
+          "answerVerification": "For a small heat transfer Q between approximately fixed temperatures Th > Tc, total ΔS = Q/Tc − Q/Th > 0.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "entropy-now-2",
+          "type": "singleChoice",
+          "conceptId": "entropy",
+          "conceptIds": [
+            "entropy",
+            "energy"
+          ],
+          "prompt": "Why is an electrically powered refrigerator consistent with thermodynamics?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Cold objects naturally send heat to warmer ones without any other change."
+            },
+            {
+              "id": "b",
+              "text": "It uses work and transfers energy to the room; the entire process must be accounted for."
+            },
+            {
+              "id": "c",
+              "text": "It removes energy from existence."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "The refrigerator uses electrical work to move energy from the cooler interior to the warmer room. The room receives that removed energy plus the energy supplied as work. The combined system respects energy conservation and the second law.",
+          "misconception": "A local reversal of heat flow either violates the second law or needs no outside input.",
+          "misconceptionChecked": "A local reversal of heat flow either violates the second law or needs no outside input.",
+          "sourceIds": [
+            "nasa-energy",
+            "nasa-thermodynamics"
+          ],
+          "answerVerification": "Over a complete operating cycle, Q_out = Q_in + W_in; including work input and surroundings resolves the apparent contradiction.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "If a room and everything in it were at the same temperature, what would be missing from the usual setup that lets a heat engine keep producing work?",
+      "wordCountReading": 391
+    },
+    {
+      "id": "physics-06",
+      "title": "One event, five questions",
+      "conceptIds": [
+        "models",
+        "force",
+        "momentum",
+        "energy",
+        "entropy"
+      ],
+      "openingQuestion": "Can one small collision connect the whole journey?",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Imagine two small gliders on a level air track. Each has a mass of 1 kilogram. One moves right at 2 meters per second; the other is stationary. A soft connector lets them stick together. During the short collision, take the external horizontal impulse to be negligible. Before looking at any numbers, notice what we have done: named the objects, the viewpoint, the interaction, and an approximation.",
+          "sourceIds": [],
+          "id": "physics-06-block-01",
+          "orderIndex": 0
+        },
+        {
+          "kind": "paragraph",
+          "text": "First ask about motion. While the gliders touch, each exerts a force on the other. Their velocities change. Once they are joined and the horizontal net force is again negligible, their shared velocity stays nearly constant. A push was needed to change motion, not to keep the pair moving.",
+          "sourceIds": [
+            "nasa-newton"
+          ],
+          "id": "physics-06-block-02",
+          "orderIndex": 1
+        },
+        {
+          "kind": "paragraph",
+          "text": "Next ask what stays constant. The two-glider system begins with momentum of 1 × 2 + 1 × 0 = 2 kilogram-meters per second, rightward. Its final mass is 2 kilograms, so its shared velocity must be 1 meter per second rightward. Momentum conservation supplies the prediction.",
+          "sourceIds": [],
+          "id": "physics-06-block-03",
+          "orderIndex": 2
+        },
+        {
+          "kind": "paragraph",
+          "text": "Now do a different accounting. Initial kinetic energy is ½ × 1 × 2² = 2 joules. Final kinetic energy is ½ × 2 × 1² = 1 joule. The missing joule is not missing total energy: with negligible energy transfer out during the collision, it becomes internal energy in the gliders and connector. The lasting deformation makes this an irreversible collision. We should not add a kinetic-energy conservation assumption to a collision that sticks.",
+          "sourceIds": [
+            "nasa-internal-energy"
+          ],
+          "id": "physics-06-block-04",
+          "orderIndex": 3
+        },
+        {
+          "kind": "paragraph",
+          "text": "If the gliders later encounter appreciable track friction, the original no-external-force approximation no longer applies. Their total momentum changes because the track exerts an external force on the pair. Including the track and Earth lets us account for the exchanged momentum. Including their internal energy also lets us account for the dwindling visible motion.",
+          "sourceIds": [
+            "openstax-momentum",
+            "openstax-energy"
+          ],
+          "id": "physics-06-block-05",
+          "orderIndex": 4
+        },
+        {
+          "kind": "paragraph",
+          "text": "Finally, ask what the experiment could tell you. If the measured shared speed differs from 1 meter per second, check the masses, initial velocities, connection, external forces, and measurement uncertainty. The equations are useful because they make a specific claim under specific conditions. A mismatch is information, not an invitation to hide an inconvenient result.",
+          "sourceIds": [
+            "nist-uncertainty"
+          ],
+          "id": "physics-06-block-06",
+          "orderIndex": 5
+        },
+        {
+          "kind": "paragraph",
+          "text": "That is the whole toolkit: state the model; identify net forces; choose the system; account for momentum and energy; consider the direction of an irreversible change. You do not need to memorize every sentence. Being able to choose the right question in a new situation is the more interesting beginning.",
+          "sourceIds": [],
+          "id": "physics-06-block-07",
+          "orderIndex": 6
+        },
+        {
+          "kind": "paragraph",
+          "text": "You can stop here. If you return after a few days, try the separate “A fresh look” questions before rereading. They use new situations. Skipping them does not block the book, and getting one wrong identifies something to revisit rather than a verdict on your ability.",
+          "sourceIds": [],
+          "id": "physics-06-block-08",
+          "orderIndex": 7
+        }
+      ],
+      "checks": [
+        {
+          "id": "synthesis-now-1",
+          "type": "singleChoice",
+          "conceptId": "momentum",
+          "conceptIds": [
+            "momentum",
+            "energy"
+          ],
+          "prompt": "In the glider example, what remains conserved during the sticking collision under the stated assumptions?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Momentum and kinetic energy."
+            },
+            {
+              "id": "b",
+              "text": "Momentum and total energy, but not kinetic energy."
+            },
+            {
+              "id": "c",
+              "text": "Kinetic energy only."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "Negligible external horizontal impulse preserves the pair’s horizontal momentum. With negligible energy transfer out, total energy is conserved within the pair, while 1 joule of kinetic energy becomes internal energy.",
+          "misconception": "Every conserved quantity must remain in the same form.",
+          "misconceptionChecked": "Every conserved quantity must remain in the same form.",
+          "sourceIds": [
+            "nasa-momentum",
+            "nasa-energy",
+            "nasa-internal-energy"
+          ],
+          "answerVerification": "p_before = 2; p_after = 2 × 1 = 2. K_before = 2 J; K_after = 1 J. Internal energy increase = 1 J.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        },
+        {
+          "id": "synthesis-now-2",
+          "type": "singleChoice",
+          "conceptId": "models",
+          "conceptIds": [
+            "models",
+            "force",
+            "momentum"
+          ],
+          "prompt": "The joined gliders now slow because of track friction. Is this a failure of momentum conservation?",
+          "choices": [
+            {
+              "id": "a",
+              "text": "Yes; a conserved quantity must stay fixed for every chosen object."
+            },
+            {
+              "id": "b",
+              "text": "No; the track now provides an external force on the two-glider system."
+            },
+            {
+              "id": "c",
+              "text": "No; momentum and energy are the same quantity."
+            }
+          ],
+          "correctChoiceId": "b",
+          "explanation": "The no-external-impulse condition no longer holds for the gliders alone. Momentum is transferred through their interaction with the track and Earth. Changing the boundary changes what must be included.",
+          "misconception": "Conservation statements can be applied without their boundary conditions.",
+          "misconceptionChecked": "Conservation statements can be applied without their boundary conditions.",
+          "sourceIds": [
+            "nasa-momentum",
+            "openstax-momentum"
+          ],
+          "answerVerification": "For the two-glider subsystem, change in momentum equals external impulse; friction gives a nonzero impulse.",
+          "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+          "optional": true
+        }
+      ],
+      "reflectionPrompt": "Explain the collision to someone without using the word “conservation.” What stays the same, what changes, and what must be included?",
+      "wordCountReading": 443
+    }
+  ],
+  "delayedReview": {
+    "id": "physics-fresh-look-v1",
+    "title": "A fresh look",
+    "intro": "Try these new situations before rereading, if you feel like it. You can skip any question or reveal its explanation. The record should say whether you used help; it should not turn one answer into a mastery score.",
+    "suggestedDelayDays": [
+      3,
+      7
+    ],
+    "scheduleMeaning": "A product starting point for revisiting the ideas, not a scientifically established optimal interval and not a required deadline.",
+    "notABarrierToCompletion": true,
+    "checks": [
+      {
+        "id": "model-later-1",
+        "type": "singleChoice",
+        "conceptId": "models",
+        "conceptIds": [
+          "models"
+        ],
+        "prompt": "A model predicts that a spring stretches 2 centimeters for each added kilogram within a stated load range. Which observation would most strongly challenge that prediction?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "One extension measurement differs by less than its measurement uncertainty."
+          },
+          {
+            "id": "b",
+            "text": "Repeated controlled measurements within the stated range show a clear discrepancy larger than the measurement uncertainty."
+          },
+          {
+            "id": "c",
+            "text": "The prediction feels surprising."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "A repeatable discrepancy larger than the measurement limitations, with the stated conditions checked, challenges the model’s prediction. This question asks how to evaluate evidence; it does not assume that every spring obeys that rule under every load.",
+        "misconception": "Intuition or any tiny measurement difference outranks controlled evidence.",
+        "misconceptionChecked": "Intuition or any tiny measurement difference outranks controlled evidence.",
+        "sourceIds": [
+          "nist-uncertainty",
+          "openstax-models"
+        ],
+        "answerVerification": "Logical comparison of the alternatives: only b specifies a repeatable, resolved discrepancy while satisfying the stated regime.",
+        "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+        "optional": true
+      },
+      {
+        "id": "force-later-1",
+        "type": "singleChoice",
+        "conceptId": "force",
+        "conceptIds": [
+          "force"
+        ],
+        "prompt": "A lift moves upward in a straight line at a steady speed. For a passenger at rest relative to the lift, how does the upward support force compare with the downward gravitational force?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The support force is larger because the passenger is moving upward."
+          },
+          {
+            "id": "b",
+            "text": "The two forces are equal in magnitude."
+          },
+          {
+            "id": "c",
+            "text": "The support force is smaller because gravity still acts."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "The passenger’s velocity is constant, so acceleration and net force are zero. The upward support force balances the downward gravitational force. Starting or stopping the lift would be a different situation.",
+        "misconception": "Upward motion requires an upward net force.",
+        "misconceptionChecked": "Upward motion requires an upward net force.",
+        "sourceIds": [
+          "nasa-newton"
+        ],
+        "answerVerification": "F_support − mg = ma = 0, so F_support = mg.",
+        "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+        "optional": true
+      },
+      {
+        "id": "momentum-later-1",
+        "type": "singleChoice",
+        "conceptId": "momentum",
+        "conceptIds": [
+          "momentum"
+        ],
+        "prompt": "A 3-kilogram equipment box drifts right at 2 meters per second and attaches to a stationary 1-kilogram box. External impulse is negligible. What is their shared velocity?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "1.5 meters per second rightward."
+          },
+          {
+            "id": "b",
+            "text": "2 meters per second rightward."
+          },
+          {
+            "id": "c",
+            "text": "6 meters per second rightward."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The initial momentum is 3 × 2 = 6 kilogram-meters per second. The combined mass is 4 kilograms, so the shared velocity is 6/4 = 1.5 meters per second rightward.",
+        "misconception": "Ignoring the added stationary mass or confusing momentum with velocity.",
+        "misconceptionChecked": "Ignoring the added stationary mass or confusing momentum with velocity.",
+        "sourceIds": [
+          "nasa-momentum"
+        ],
+        "answerVerification": "Independent calculation: (3 × 2 + 1 × 0)/(3 + 1) = 1.5; final momentum 4 × 1.5 = 6.",
+        "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+        "optional": true
+      },
+      {
+        "id": "energy-later-1",
+        "type": "singleChoice",
+        "conceptId": "energy",
+        "conceptIds": [
+          "energy"
+        ],
+        "prompt": "Two identical balls are dropped from rest near Earth, one from height h and one from height 2h. Ignore air resistance. Just before the ground, how do their kinetic energies compare?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "The higher drop has twice the kinetic energy."
+          },
+          {
+            "id": "b",
+            "text": "The higher drop has four times the kinetic energy."
+          },
+          {
+            "id": "c",
+            "text": "They have equal kinetic energies because their masses are equal."
+          }
+        ],
+        "correctChoiceId": "a",
+        "explanation": "The gravitational potential-energy decrease is mgh. Doubling height doubles the energy available to become kinetic energy. Speed does not double: the speed-squared relation means it increases by a factor of the square root of 2.",
+        "misconception": "Transferring the speed-squared rule to height without checking the energy relationship.",
+        "misconceptionChecked": "Transferring the speed-squared rule to height without checking the energy relationship.",
+        "sourceIds": [
+          "nasa-energy-formulas"
+        ],
+        "answerVerification": "K_high/K_low = mg(2h)/(mgh) = 2; v_high/v_low = sqrt(2).",
+        "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+        "optional": true
+      },
+      {
+        "id": "entropy-later-1",
+        "type": "singleChoice",
+        "conceptId": "entropy",
+        "conceptIds": [
+          "entropy",
+          "energy"
+        ],
+        "prompt": "Two metal blocks at different temperatures touch inside an insulated container. Nothing else interacts with them. Which outcome is consistent with ordinary macroscopic thermodynamics?",
+        "choices": [
+          {
+            "id": "a",
+            "text": "Energy is destroyed as their temperatures become closer."
+          },
+          {
+            "id": "b",
+            "text": "Total energy stays constant while their combined entropy increases as they approach thermal equilibrium."
+          },
+          {
+            "id": "c",
+            "text": "Each block’s entropy must increase by the same amount."
+          }
+        ],
+        "correctChoiceId": "b",
+        "explanation": "Energy transfers from the warmer block to the cooler one without leaving the isolated pair. The warmer block’s entropy decreases, the cooler block’s increases by more, and the combined entropy increases during this irreversible approach to equilibrium.",
+        "misconception": "Confusing conserved energy with entropy, or applying the total-entropy rule separately to each part.",
+        "misconceptionChecked": "Confusing conserved energy with entropy, or applying the total-entropy rule separately to each part.",
+        "sourceIds": [
+          "nasa-energy",
+          "nasa-thermodynamics",
+          "openstax-entropy"
+        ],
+        "answerVerification": "For each small transfer Q with Th > Tc, combined ΔS = Q(1/Tc − 1/Th) > 0, while energy lost by one equals energy gained by the other.",
+        "evidenceScope": "One response to this question under the recorded assistance conditions; not a mastery diagnosis.",
+        "optional": true
+      }
+    ],
+    "reflectionPrompt": "Which explanation now feels clearer? Which question would you still like the book to explore?"
+  },
+  "optionalDiagramOpportunities": [
+    {
+      "lessonId": "physics-02",
+      "description": "A cart with two equal opposite horizontal arrows versus a cart with unequal arrows; clearly separate force arrows from velocity.",
+      "accessibleText": "Balanced horizontal forces give zero horizontal acceleration; a net rightward force gives rightward acceleration.",
+      "mustNotImply": "A rightward force always means rightward velocity."
+    },
+    {
+      "lessonId": "physics-03",
+      "description": "Boundary around both carts before and after a push, with signed momenta that sum to zero.",
+      "accessibleText": "The lighter cart moves faster, with momentum equal in magnitude and opposite in direction to the heavier cart.",
+      "mustNotImply": "Individual momenta or kinetic energy remain fixed."
+    },
+    {
+      "lessonId": "physics-04",
+      "description": "Original energy bars showing 10 joules of lost gravitational potential energy becoming 7 joules of kinetic plus 3 joules of other energy.",
+      "accessibleText": "The energy categories change while the accounted total remains 10 joules.",
+      "mustNotImply": "All mechanical losses instantly become heat transferred to the environment."
+    },
+    {
+      "lessonId": "physics-05",
+      "description": "A warmer and cooler block inside one isolated-system outline, with a heat-transfer arrow from warm to cool.",
+      "accessibleText": "Energy lost by the warmer block equals energy gained by the cooler block; total entropy increases.",
+      "mustNotImply": "Heat arrows are entropy arrows or each part gains entropy."
+    }
+  ],
+  "measurementLimits": [
+    "No mastery percentage is justified by this small, uncalibrated question bank.",
+    "Multiple-choice success is narrower evidence than independently explaining or applying the idea.",
+    "A skipped check is missing evidence, not an incorrect answer.",
+    "An answer seen before responding is assisted exposure, not unaided retrieval.",
+    "Delayed alternate questions are new scenarios but are not psychometrically equated with the immediate questions.",
+    "The unit is introductory classical physics, not the full knowledge curriculum or a complete physics course."
+  ],
+  "validation": {
+    "status": "schema_math_and_independent_content_review_passed",
+    "checkedAt": "2026-10-06T19:27:15.946972+00:00",
+    "schemaAndReferences": "passed",
+    "counts": {
+      "lessons": 6,
+      "concepts": 5,
+      "questions": 17,
+      "sources": 11
+    },
+    "readingWords": 2302,
+    "lessonWordCounts": {
+      "physics-01": 349,
+      "physics-02": 346,
+      "physics-03": 368,
+      "physics-04": 405,
+      "physics-05": 391,
+      "physics-06": 443
+    },
+    "numericChecks": {
+      "distance_m": 6,
+      "acceleration_m_s2": 2.0,
+      "heavy_cart_velocity_m_s": -0.5,
+      "sticking_trolleys_velocity_m_s": 2.0,
+      "half_mass_speed_ratio": 2.0,
+      "lost_potential_energy_J": 10,
+      "other_energy_J": 3,
+      "double_speed_energy_ratio": 4.0,
+      "synthesis_velocity_m_s": 1.0,
+      "synthesis_initial_kinetic_J": 2.0,
+      "synthesis_final_kinetic_J": 1.0,
+      "delayed_box_velocity_m_s": 1.5,
+      "double_height_energy_ratio": 2.0
+    },
+    "entropyChecks": {
+      "reservoirPairs": 9,
+      "finiteHotChange_J_K": -0.7410797215372185,
+      "finiteColdChange_J_K": 0.8004270767353636,
+      "finiteTotalChange_J_K": 0.05934735519814516
+    },
+    "independentReview": {
+      "reviewer": "/root/import_route",
+      "result": "Reviewed numeric examples, all answer keys, entropy and system boundaries. No numeric or key errors found.",
+      "correctionsApplied": [
+        "Replaced an ambiguous delayed pendulum approximation question with a clearly stated spring prediction and measurement-uncertainty comparison.",
+        "Specified equal initial/final momentum for zero net external impulse over an interval, rather than claiming constant momentum at every instant."
+      ]
+    },
+    "limits": "No human learner study, calibration, device layout test, or claim of learning efficacy. Root owns integration/rendering verification."
+  },
+  "wordCountReading": 2302
+}

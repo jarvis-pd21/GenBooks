@@ -4,7 +4,9 @@
 
 **Vision:** A personal library that helps you understand the world from first principles, connect ideas across systems, and use what you learn long after you close a book.
 
-The in-app edition of these explanations comes from [`Resources/foundations.json`](../Resources/foundations.json). The [Physics check score](physics-score.md) defines the precise numerical policy. This page explains the human concepts and the system map; it does not claim that GenBooks has measured their causal effects.
+The native in-app edition of these explanations comes from [`Resources/foundations.json`](../Resources/foundations.json). The [Physics check score](physics-score.md) defines the precise numerical policy. This page explains the human concepts and the system map; it does not claim that GenBooks has measured their causal effects.
+
+The web edition uses [`web/content/foundations.json`](../web/content/foundations.json), with its own account and sync boundaries. Its first recommendation rule uses due concept reviews and unfinished readings; session-length preferences and experience feedback are recorded but do not yet change the web recommendation. The conceptual diagram below does not imply every possible input is implemented.
 
 ## Reason from first principles
 
@@ -107,4 +109,4 @@ flowchart TB
 
 The fixed Physics course and its local progress are separate from the generative Library. Preferences do not rewrite its readings. BookBot can discuss a lesson online using general model knowledge; it does not independently verify those replies or turn them into scored evidence. A source-backed authoring failure leaves the candidate unpublished and existing reading available.
 
-The public project implements native iOS reading and learning. Web, SMS, iMessage, and phone-call learning interfaces are excluded because there is no shared backend. The system map expresses a design rationale, not proof of improved retention or an autonomous adaptive curriculum.
+The public project includes native iOS reading and learning plus a web app with account sync across browsers. Native and web records remain separate. SMS, iMessage and phone-call learning interfaces are outside this release. The system map expresses a design rationale, not proof of improved retention or an autonomous adaptive curriculum.

@@ -1,5 +1,7 @@
 # App Store readiness
 
+This page describes the native iPhone app. For the public web app and its separate account storage, see the [web documentation](../web/README.md).
+
 GenBooks is a development project. A public source repository, a successful simulator test, and a development install are different milestones from App Store submission or approval. This page lists concrete remaining release work; it does not claim completion or Apple endorsement.
 
 ## Release work

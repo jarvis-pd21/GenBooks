@@ -42,3 +42,8 @@ Apple SDKs, platform fonts, and system symbols are used through the platform. Th
 ## Original project artwork
 
 The current app-icon and cover PNGs are original geometric renderings of `scripts/generate_brand_assets.swift`, included under the project MIT license. The generator uses no input images, external fonts, or third-party marks. This notice applies to those current generated assets; it does not clear earlier image masters or third-party book content.
+
+
+## Web application
+
+The web application preserves the component, framework and compression notices in [web/THIRD_PARTY_NOTICES.md](web/THIRD_PARTY_NOTICES.md). Its dependency lockfile and bundled licenses are included.
