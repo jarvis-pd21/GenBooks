@@ -44,3 +44,7 @@ Secrets.plist
 # Local test/build evidence and generated project files
 artifacts/
 LivingReader.xcodeproj/
+
+# Web build adapters are source, unlike native build output.
+!web/build/
+!web/build/**
