@@ -1,5 +1,7 @@
 # Data flow and privacy
 
+This page describes the native iPhone app. For the public web app and its separate account storage, see the [web documentation](../web/README.md).
+
 This page describes the current source architecture. It is not a claim of App Store approval, a completed legal privacy policy, or a promise about an external provider's retention. A distributor must publish a policy for the exact build and services it ships.
 
 ## Local data
