@@ -38,6 +38,7 @@ Actual iPhone Simulator screens in light and dark appearance.
 ## Native features
 
 - **Library and Reader:** locally saved books, Scroll and Pages reading, adjustable typography, reading position, bookmarks, and revision history.
+- **Original pages:** unchanged imported PDFs with tables, figures and layout intact; zoom, rotation, contents, search and a separately saved page position.
 - **Notebook:** notes and saved words, with search and editing.
 - **Learning:** an original, fixed Physics course with six readings, five concepts, practice, and a transparent Physics check score. The score records results on ten designated multiple-choice questions; it is not a mastery percentage.
 - **Foundations:** the mission, learning definitions, evidence limits, and scoring policy, available in the app and [documentation](docs/foundations.md).
@@ -76,6 +77,10 @@ The gate includes unit tests, native interface tests, and two source-continuatio
 ## Know the boundaries
 
 New unprotected PDF imports preserve the complete supplied file. **Original pages** displays its tables, figures, equations and layout with zoom, contents, search and a separate saved page position. Scanned pages remain readable; search requires an existing text layer, and no OCR is performed. **Text view** keeps notes and learning tools. Its extraction, including EPUB imports, can lose layout and images; it is not a facsimile. There is no in-app tool to attach a PDF to an older text-only import. Import its PDF as a new book to gain Original pages; existing notes stay on the earlier text copy. Imported books begin as **Canon**, meaning source-derived content rather than generated prose. Applying a supported change can promote the same book to **Living**, retaining prior text revisions.
+
+<img src="docs/screenshots/original-pages.png" alt="Original pages reader retaining a two-column table, shading and caption in an original synthetic PDF sample" width="320">
+
+Actual iPhone Simulator capture using the project's original test document. This demonstrates imported-page preservation; the test document is not bundled in the public Release app.
 
 The reader protects consumed chapter revisions; selected-word continuation also preserves the prefix through the chosen word. “Consumed” is a recorded chapter state, not eye tracking or proof that every visible word was read. The source-backed workflow retrieves one source and reviews an opening preview against it. It does not research and verify an entire textbook.
 
