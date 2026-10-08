@@ -114,6 +114,22 @@ final class CreateBookViewModel: ObservableObject {
         isWorking = false
     }
 
+    func importFile(_ payload: CanonFileIngest.Payload) async {
+        guard !isWorking else { return }
+        isWorking = true
+        errorMessage = nil
+        statusMessage = "Preserving source…"
+        do {
+            draft = try await wizard.prepareImport(draft: draft, payload: payload)
+            isWorking = false
+            await importBook()
+        } catch {
+            errorMessage = error.localizedDescription
+            isWorking = false
+            step = .form
+        }
+    }
+
     func generateBook() async {
         guard !isWorking else { return }
         errorMessage = nil
@@ -468,10 +484,16 @@ struct CreateBookSheet: View {
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("create.import.epub.help")
             } footer: {
-                Text("Text import does not preserve illustrations; equation formatting may be lost. Keep the original file.")
+                Text("PDF imports keep the supplied pages, tables, and illustrations in Original pages, including scans. Text view and EPUB imports can lose layout. Scans without a text layer have no text search; GenBooks does not perform OCR.")
             }
             Section("Or paste") {
-                TextField("Paste plain text", text: $model.draft.importedText, axis: .vertical)
+                TextField("Paste plain text", text: Binding(
+                    get: { model.draft.importedText },
+                    set: {
+                        model.draft.importedText = $0
+                        model.draft.importSourceKind = .pastedText
+                        model.draft.importedOriginal = nil
+                    }), axis: .vertical)
                     .lineLimit(4...10)
                     .accessibilityIdentifier("create.import.paste")
                 if clipboardHasText {
@@ -743,6 +765,7 @@ struct CreateBookSheet: View {
         else { return }
         model.draft.importedText = value
         model.draft.importSourceKind = .pastedText
+        model.draft.importedOriginal = nil
         model.errorMessage = nil
         model.statusMessage = "Pasted from clipboard."
         #endif
@@ -755,7 +778,7 @@ struct CreateBookSheet: View {
                 Text("1. Buy a DRM-free EPUB you own.")
                 Text("2. Save it to Files on this iPhone.")
                 Text("3. Share the file → Open in GenBooks.")
-                Text("Text import does not preserve illustrations; equation formatting may be lost. Keep the original file.")
+                Text("EPUB import extracts text and can lose illustrations and equation formatting. PDF imports keep the supplied pages, tables, and figures in Original pages, including scans. Text view can lose layout; GenBooks does not perform OCR on scans.")
                 Text("Or tap Choose EPUB here. DRM-protected files are refused.")
                     .foregroundStyle(.secondary)
               }
@@ -791,17 +814,7 @@ struct CreateBookSheet: View {
         defer { if accessed { url.stopAccessingSecurityScopedResource() } }
         do {
             let prepared = try CanonFileIngest.prepare(from: url)
-            if model.draft.trimmedTitle.isEmpty, let title = prepared.title {
-                model.draft.title = title
-            }
-            if model.draft.trimmedAuthor.isEmpty, let author = prepared.author {
-                model.draft.author = author
-            }
-            model.draft.importedText = prepared.plainText
-            model.draft.importSourceKind = prepared.sourceKind
-            model.errorMessage = nil
-            model.statusMessage = "Imported \(model.draft.importSourceKind.provenanceLabel)."
-            Task { await model.importBook() }
+            Task { await model.importFile(prepared) }
         } catch {
             model.errorMessage = error.localizedDescription
         }

@@ -4,8 +4,8 @@ import Foundation
 import PDFKit
 #endif
 
-/// Classifies a shared/opened file, fails closed on DRM, then extracts verbatim
-/// text for `ManuscriptImporter`. EPUB/PDF stay ingest-only.
+/// Classifies a shared/opened file and extracts text for `ManuscriptImporter`.
+/// PDF bytes are retained separately; extraction cannot preserve visual layout.
 enum CanonFileIngest {
     struct Payload: Equatable, Sendable {
         var title: String?
@@ -13,6 +13,7 @@ enum CanonFileIngest {
         var plainText: String
         var sourceKind: ImportSourceKind
         var filename: String
+        var originalPDF: Data? = nil
     }
 
     static func classify(url: URL, filename: String? = nil) throws -> ImportSourceKind {
@@ -41,6 +42,7 @@ enum CanonFileIngest {
 
     static func prepare(from url: URL) throws -> Payload {
         let readable = try readableCopy(of: url)
+        defer { try? FileManager.default.removeItem(at: readable) }
         let data = try Data(contentsOf: readable)
         return try prepare(data: data, filename: url.lastPathComponent)
     }
@@ -61,11 +63,12 @@ enum CanonFileIngest {
             try assertPDFNotEncrypted(data)
             let text = try extractPDFText(from: data)
             return Payload(
-                title: nil,
+                title: URL(fileURLWithPath: filename).deletingPathExtension().lastPathComponent,
                 author: nil,
                 plainText: text,
                 sourceKind: .pdfExtract,
-                filename: filename
+                filename: filename,
+                originalPDF: data
             )
         case .pastedText:
             throw CreateBookError.unsupportedImportType
@@ -109,7 +112,7 @@ enum CanonFileIngest {
 
     private static func extractPDFText(from data: Data) throws -> String {
         #if canImport(PDFKit)
-        guard let document = PDFDocument(data: data) else {
+        guard let document = PDFDocument(data: data), document.pageCount > 0 else {
             throw CreateBookError.emptySource
         }
         var pages: [String] = []
@@ -120,7 +123,11 @@ enum CanonFileIngest {
         }
         let joined = pages.joined(separator: "\n\n")
         if joined.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw CreateBookError.emptySource
+            return """
+            # Editorial guidance — text extraction unavailable
+
+            This PDF has no extractable text. Read its preserved pages in Original pages to see the book, including its illustrations and layout. This message is GenBooks guidance, not text from the author. Search and text notes require an extractable text layer.
+            """
         }
         return joined
         #else

@@ -334,7 +334,7 @@ struct ListenSheet: View {
                 .disabled(model.partCount == 0)
                 .accessibilityIdentifier("listen.download")
             } else {
-                Text("Narration needs an API key. Add one in Reading settings → AI. Chapters you’ve already downloaded still play offline.")
+                Text("Narration needs an API key. Add one in Settings → BookBot. Chapters you’ve already downloaded still play offline.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("listen.needsKey")

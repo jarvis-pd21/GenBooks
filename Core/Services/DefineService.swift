@@ -141,6 +141,7 @@ enum DefineService {
 
     /// Async enrichment via Luna when a Keychain key is present. Soft-fails to `baseline`.
     static func enrich(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         request: DefineWordRequest,
         baseline: DefinitionResult,
         keyStore: APIKeyStoring = KeychainAPIKeyStore.shared,
@@ -164,6 +165,7 @@ enum DefineService {
 
         do {
             let client = DefineLiveClient(
+                sharingPermission: sharingPermission,
                 apiKey: key,
                 preferredModel: modelPreference,
                 session: session
@@ -182,7 +184,9 @@ enum DefineService {
             var copy = baseline
             copy.isEnriching = false
             if copy.rich == nil || copy.source == .offlineFallback {
-                copy.softFailMessage = "Couldn’t reach the dictionary service. Reading continues offline."
+                copy.softFailMessage = sharingPermission()
+                    ? "Couldn’t reach the dictionary service. Reading continues offline."
+                    : AISharingConsentStore.permissionRequiredMessage
             }
             return copy
         }
@@ -793,6 +797,7 @@ enum LocalDictionaryLexicon {
 // MARK: - Luna client
 
 struct DefineLiveClient: @unchecked Sendable {
+    private let sharingPermission: AISharingConsentStore.PermissionProvider
     var apiKey: String
     var preferredModel: OpenAIModelOption
     var session: URLSession
@@ -800,12 +805,14 @@ struct DefineLiveClient: @unchecked Sendable {
     var timeout: TimeInterval
 
     init(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         apiKey: String,
         preferredModel: OpenAIModelOption = .defaultAsk,
         session: URLSession? = nil,
         endpoint: URL = URL(string: "https://api.openai.com/v1/chat/completions")!,
         timeout: TimeInterval = 25
     ) {
+        self.sharingPermission = sharingPermission
         self.apiKey = apiKey
         self.preferredModel = preferredModel
         self.endpoint = endpoint
@@ -882,18 +889,26 @@ struct DefineLiveClient: @unchecked Sendable {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
-        let body: [String: Any] = [
+        var body: [String: Any] = [
             "model": model.rawValue,
             "messages": [
                 ["role": "system", "content": system],
                 ["role": "user", "content": user]
             ],
-            "temperature": 0.3,
-            "max_tokens": 1200,
             "response_format": ["type": "json_object"]
         ]
+        // Match the main AI client: reasoning models share their output budget
+        // with reasoning and use default sampling; legacy models retain theirs.
+        switch model {
+        case .gpt6Astra, .gpt56Luna:
+            body["max_completion_tokens"] = 1200
+        case .gpt41Mini, .gpt41, .gpt4oMini, .gpt4o:
+            body["temperature"] = 0.3
+            body["max_tokens"] = 1200
+        }
         urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
 
+        try AISharingConsentStore.requirePermission(using: sharingPermission)
         let (data, response) = try await session.data(for: urlRequest)
         guard let http = response as? HTTPURLResponse else {
             throw AIServiceError.underlying("No HTTP response")

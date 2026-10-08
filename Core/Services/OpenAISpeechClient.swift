@@ -10,17 +10,20 @@ import Foundation
 final class OpenAISpeechClient: SpeechSynthesizing, @unchecked Sendable {
     typealias APIKeyProvider = @Sendable () throws -> String?
 
+    private let sharingPermission: AISharingConsentStore.PermissionProvider
     private let apiKeyProvider: APIKeyProvider
     private let session: URLSession
     private let endpoint: URL
     private let timeout: TimeInterval
 
     init(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         apiKeyProvider: @escaping APIKeyProvider,
         session: URLSession? = nil,
         endpoint: URL = URL(string: "https://api.openai.com/v1/audio/speech")!,
         timeout: TimeInterval = 90
     ) {
+        self.sharingPermission = sharingPermission
         self.apiKeyProvider = apiKeyProvider
         self.endpoint = endpoint
         self.timeout = timeout
@@ -60,6 +63,7 @@ final class OpenAISpeechClient: SpeechSynthesizing, @unchecked Sendable {
             throw ListenError.underlying("Couldn’t build the narration request.")
         }
 
+        try AISharingConsentStore.requirePermission(using: sharingPermission)
         let data: Data
         let response: URLResponse
         do {

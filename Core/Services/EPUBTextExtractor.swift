@@ -263,7 +263,7 @@ enum EPUBTextExtractor {
             let matches = regex.matches(in: result, range: NSRange(location: 0, length: ns.length))
             for match in matches.reversed() {
                 guard match.numberOfRanges >= 2 else { continue }
-                let inner = decodeEntities(ns.substring(with: match.range(at: 1)))
+                let inner = ns.substring(with: match.range(at: 1))
                     .replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 let replacement = "\n\(prefix)\(inner)\n"
@@ -273,25 +273,35 @@ enum EPUBTextExtractor {
         return result
     }
 
+    /// Decode one layer only. Replacement text is never scanned again, so a
+    /// literal entity such as &amp;gt; remains &gt; rather than becoming >.
     private static func decodeEntities(_ text: String) -> String {
-        var result = text
-            .replacingOccurrences(of: "&nbsp;", with: " ")
-            .replacingOccurrences(of: "&amp;", with: "&")
-            .replacingOccurrences(of: "&lt;", with: "<")
-            .replacingOccurrences(of: "&gt;", with: ">")
-            .replacingOccurrences(of: "&quot;", with: "\"")
-            .replacingOccurrences(of: "&#39;", with: "'")
-            .replacingOccurrences(of: "&apos;", with: "'")
-        if let regex = try? NSRegularExpression(pattern: #"&#(\d+);"#) {
-            let ns = result as NSString
-            for match in regex.matches(in: result, range: NSRange(location: 0, length: ns.length)).reversed() {
-                if let range = Range(match.range(at: 1), in: result),
-                   let value = Int(result[range]),
+        let pattern = #"&(#(?:[xX][0-9A-Fa-f]+|[0-9]+)|nbsp|amp|lt|gt|quot|apos);"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return text }
+        let named = ["nbsp": " ", "amp": "&", "lt": "<", "gt": ">", "quot": "\"", "apos": "'"]
+        var result = ""
+        var cursor = text.startIndex
+        for match in regex.matches(in: text, range: NSRange(text.startIndex..., in: text)) {
+            guard let range = Range(match.range, in: text),
+                  let entityRange = Range(match.range(at: 1), in: text) else { continue }
+            result += text[cursor..<range.lowerBound]
+            let entity = String(text[entityRange])
+            if let replacement = named[entity] {
+                result += replacement
+            } else {
+                let hex = entity.hasPrefix("#x") || entity.hasPrefix("#X")
+                let digits = entity.dropFirst(hex ? 2 : 1)
+                if let value = UInt32(digits, radix: hex ? 16 : 10),
                    let scalar = UnicodeScalar(value) {
-                    result.replaceSubrange(Range(match.range, in: result)!, with: String(Character(scalar)))
+                    result += String(scalar)
+                } else {
+                    // Invalid or out-of-range scalars stay visible; never guess.
+                    result += text[range]
                 }
             }
+            cursor = range.upperBound
         }
+        result += text[cursor...]
         return result
     }
 

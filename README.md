@@ -20,7 +20,7 @@ The web code is in [`web/`](web/). See the [web README](web/README.md) for the a
 | Fixed Physics course and transparent check score | Yes | Yes |
 | Sign-in and account sync across browsers | Yes | No |
 | Offline saved reading | No offline guarantee | Yes |
-| DRM-free imports | EPUB, TXT, Markdown; text only | EPUB and text-based PDF |
+| DRM-free imports | EPUB, TXT, Markdown; text only | EPUB as text; PDF with preserved original pages |
 | AI generation, BookBot, rewriting, narration | Not in this first web release | Optional provider-backed features |
 | Shared data between native and web | Not yet | Not yet |
 
@@ -38,10 +38,11 @@ Actual iPhone Simulator screens in light and dark appearance.
 ## Native features
 
 - **Library and Reader:** locally saved books, Scroll and Pages reading, adjustable typography, reading position, bookmarks, and revision history.
+- **Original pages:** unchanged imported PDFs with tables, figures and layout intact; zoom, rotation, contents, search and a separately saved page position.
 - **Notebook:** notes and saved words, with search and editing.
 - **Learning:** an original, fixed Physics course with six readings, five concepts, practice, and a transparent Physics check score. The score records results on ten designated multiple-choice questions; it is not a mastery percentage.
 - **Foundations:** the mission, learning definitions, evidence limits, and scoring policy, available in the app and [documentation](docs/foundations.md).
-- **BookBot:** an optional online reading companion using a provider key you supply. Its replies are not independently source-verified.
+- **BookBot:** an optional online reading companion using a provider key you supply. OpenAI requests stay off until you explicitly allow sharing in Settings, and you can revoke that permission. Its replies are not independently source-verified.
 - **Create:** text imports, ordinary AI generation, and a separate source-backed opening-preview workflow. [Their limits differ](docs/architecture.md#creation-and-adaptation).
 
 Saved reading and the fixed Physics course work offline. Opening a book does not call AI. New AI replies, generation, retrieved sources, and uncached narration require a network and the relevant provider. This is an early native app, not an App Store approved release or a validated learning intervention.
@@ -75,7 +76,11 @@ The gate includes unit tests, native interface tests, and two source-continuatio
 
 ## Know the boundaries
 
-Imports turn DRM-free EPUBs and text-based PDFs into structured text. Original layout, illustrations, and equation formatting may be lost; scanned PDFs have no OCR import. Imported books begin as **Canon**: imported wording rather than generated prose. Applying a supported change can promote the same book to **Living**, retaining its prior revisions.
+New unprotected PDF imports preserve the complete supplied file. **Original pages** displays its tables, figures, equations and layout with zoom, contents, search and a separate saved page position. Scanned pages remain readable; search requires an existing text layer, and no OCR is performed. **Text view** keeps notes and learning tools. Its extraction, including EPUB imports, can lose layout and images; it is not a facsimile. There is no in-app tool to attach a PDF to an older text-only import. Import its PDF as a new book to gain Original pages; existing notes stay on the earlier text copy. Imported books begin as **Canon**, meaning source-derived content rather than generated prose. Applying a supported change can promote the same book to **Living**, retaining prior text revisions.
+
+<img src="docs/screenshots/original-pages.png" alt="Original pages reader retaining a two-column table, shading and caption in an original synthetic PDF sample" width="320">
+
+Actual iPhone Simulator capture using the project's original test document. This demonstrates imported-page preservation; the test document is not bundled in the public Release app.
 
 The reader protects consumed chapter revisions; selected-word continuation also preserves the prefix through the chosen word. “Consumed” is a recorded chapter state, not eye tracking or proof that every visible word was read. The source-backed workflow retrieves one source and reviews an opening preview against it. It does not research and verify an entire textbook.
 
@@ -92,6 +97,7 @@ The native app stores reading and learning data locally and has no account or sh
 | [Design](docs/design.md) | Navigation, visual hierarchy, accessibility, and why the interface works this way |
 | [Content provenance](docs/content-provenance.md) | What the project owns and which external rights remain separate |
 | [Privacy](docs/privacy.md) | What stays local and what an online action sends |
+| [Help & Support](docs/support.md) | Import help, provider setup, data controls and contact |
 | [App Store readiness](docs/app-store-readiness.md) | Concrete distribution requirements and unresolved work |
 
 ## License

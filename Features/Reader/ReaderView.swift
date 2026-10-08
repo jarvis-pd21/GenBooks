@@ -36,6 +36,15 @@ struct ReaderView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let keyStore: APIKeyStoring
+    private let originalDocumentsRoot: URL?
+    private let textCheckpoints: ReadingCheckpointStoring
+    @State private var originalDocument: LoadedOriginalDocument?
+    @State private var originalPageIndex = 0
+    @State private var originalPagePoint: CGPoint?
+    @State private var originalLoadError: String?
+    @State private var originalPositionError: String?
+    @State private var checkedOriginal = false
+    @State private var showsOriginalPages = true
 
     init(
         book: Book,
@@ -49,6 +58,7 @@ struct ReaderView: View {
         preferenceStore: ReaderPreferenceStoring,
         modelPrefs: AIModelPreferenceStore,
         keyStore: APIKeyStoring = KeychainAPIKeyStore.shared,
+        originalDocumentsRoot: URL? = nil,
         askService: (any AIService)? = nil,
         listenServices: ListenServices? = nil
     ) {
@@ -104,9 +114,133 @@ struct ReaderView: View {
         self.vocabulary = vocabulary
         self.bookmarks = bookmarks
         self.keyStore = keyStore
+        self.originalDocumentsRoot = originalDocumentsRoot
+        self.textCheckpoints = checkpoints
     }
 
     var body: some View {
+        Group {
+            if !checkedOriginal {
+                ProgressView("Opening…")
+                    .accessibilityIdentifier("reader.loading")
+            } else if let error = originalLoadError {
+                ContentUnavailableView {
+                    Label("Original file unavailable", systemImage: "doc.badge.ellipsis")
+                } description: {
+                    Text(error + " Your saved text and notes have not changed.")
+                } actions: {
+                    Button("Open text view") {
+                        originalLoadError = nil
+                        setOriginalMode(false)
+                    }
+                    .accessibilityIdentifier("original.error.text")
+                }
+            } else if showsOriginalPages, let original = originalDocument {
+                OriginalPDFReaderView(
+                    url: original.url,
+                    title: model.book.title,
+                    initialPageIndex: originalPageIndex,
+                    initialPoint: originalPagePoint,
+                    chapterLocations: original.attachment.chapters,
+                    onPositionChange: { index, point in
+                        saveOriginalPosition(index: index, point: point, original: original)
+                    },
+                    onShowText: { setOriginalMode(false) }
+                )
+                .id(original.attachment.source.sha256)
+                .safeAreaInset(edge: .bottom) {
+                    if let originalPositionError {
+                        Text(originalPositionError)
+                            .font(.caption)
+                            .padding(8)
+                            .background(.regularMaterial)
+                            .accessibilityIdentifier("original.position.error")
+                    }
+                }
+            } else {
+                textReaderBody
+                    .safeAreaInset(edge: .top, spacing: 0) {
+                        if originalDocument != nil {
+                            HStack {
+                                Text("Text view")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Button { setOriginalMode(true) } label: {
+                                    Label("Original pages", systemImage: "doc.richtext")
+                                }
+                                .font(.subheadline.weight(.semibold))
+                                .accessibilityIdentifier("reader.original.button")
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background(.regularMaterial)
+                        }
+                    }
+            }
+        }
+        .background(ReaderOrientationObserver().allowsHitTesting(false).accessibilityHidden(true))
+        .task { loadOriginalDocument() }
+    }
+
+    private var originalModeKey: String { "livingreader.original.mode.\(model.book.id.uuidString)" }
+
+    private func setOriginalMode(_ original: Bool) {
+        if original, model.isReady {
+            model.prepareForTextRemount()
+            pageJumpToken = nil
+            pageJumpIndex = nil
+        }
+        showsOriginalPages = original
+        UserDefaults.standard.set(original ? "original" : "text", forKey: originalModeKey)
+    }
+
+    private func loadOriginalDocument() {
+        guard !checkedOriginal else { return }
+        defer { checkedOriginal = true }
+        do {
+            let store = try OriginalDocumentStore(rootDirectory: originalDocumentsRoot)
+            originalDocument = try store.load(bookID: model.book.id)
+            if let original = originalDocument {
+                do {
+                    if let position = try store.loadPosition(bookID: model.book.id, sourceSHA256: original.attachment.source.sha256) {
+                        originalPageIndex = position.pageIndex
+                        if let x = position.pagePointX, let y = position.pagePointY {
+                            originalPagePoint = CGPoint(x: x, y: y)
+                        }
+                    } else if let checkpoint = try? textCheckpoints.loadCheckpoint(bookId: model.book.id),
+                              let chapter = original.attachment.chapters.first(where: { $0.chapterID == checkpoint.chapterId }) {
+                        // A verified chapter start is a useful first opening; it is
+                        // not a translation of a text offset or proof of reading.
+                        originalPageIndex = chapter.pageIndex
+                    }
+                } catch {
+                    originalPositionError = "Your saved page could not be read. The original file is still available."
+                }
+                showsOriginalPages = UserDefaults.standard.string(forKey: originalModeKey) != "text"
+            }
+        } catch {
+            originalLoadError = error.localizedDescription
+        }
+    }
+
+    private func saveOriginalPosition(index: Int, point: CGPoint?, original: LoadedOriginalDocument) -> Bool {
+        originalPageIndex = index
+        originalPagePoint = point
+        do {
+            let store = try OriginalDocumentStore(rootDirectory: originalDocumentsRoot)
+            try store.savePosition(bookID: model.book.id, sourceSHA256: original.attachment.source.sha256,
+                                   pageIndex: index, pagePointX: point.map { Double($0.x) },
+                                   pagePointY: point.map { Double($0.y) })
+            originalPositionError = nil
+            return true
+        } catch {
+            originalPositionError = "Your page could not be saved. Reading is still available."
+            return false
+        }
+    }
+
+    private var textReaderBody: some View {
         ZStack {
             (settings.typography.backgroundColor.swiftUIColor)
                 .ignoresSafeArea()
@@ -191,7 +325,6 @@ struct ReaderView: View {
                     .accessibilityHidden(true)
             }
         }
-        .background(ReaderOrientationObserver().allowsHitTesting(false).accessibilityHidden(true))
         .navigationTitle(model.currentChapterTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar((chromeVisible || forceChromeVisible) ? .visible : .hidden, for: .navigationBar)
@@ -489,7 +622,9 @@ struct ReaderView: View {
                 onClose: { model.showRegenerateFromHere = false }
             )
         }
-        .task { await model.open() }
+        .task {
+            if !model.isReady { await model.open() }
+        }
 
         .onChange(of: settings.fontSize) { _, _ in
             model.rebuildDocumentPreservingLocation()

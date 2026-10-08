@@ -242,6 +242,9 @@ struct CreateBookDraft: Identifiable, Codable, Equatable, Hashable, Sendable {
     /// the exact input so invalid edits cannot silently reuse another duration.
     var readingTimeInput: String? = nil
 
+    /// Durable staged PDF reference, never raw bytes or a temporary Files URL.
+    var importedOriginal: OriginalDocumentReference? = nil
+
     static func blank(id: UUID = UUID(), at date: Date = Date()) -> CreateBookDraft {
         CreateBookDraft(
             id: id,

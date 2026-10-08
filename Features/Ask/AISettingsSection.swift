@@ -8,6 +8,8 @@ struct AISettingsSection: View {
     /// Called after successful key save/remove or model change so Reader can re-resolve Live vs Mock.
     var onAIConfigurationChanged: (() -> Void)? = nil
 
+    @AppStorage(AISharingConsentStore.defaultsKey) private var disclosureVersion = 0
+    @State private var confirmsOpenAISharing = false
     @State private var keyDraft: String = ""
     @State private var hasStoredKey = false
     @State private var statusMessage: String?
@@ -15,6 +17,7 @@ struct AISettingsSection: View {
     @State private var confirmsKeyRemoval = false
 
     var body: some View {
+        sharingPermissionSection
         Section {
             Picker("BookBot model", selection: $modelPrefs.askModel) {
                 ForEach(OpenAIModelOption.allCases) { model in
@@ -83,7 +86,8 @@ struct AISettingsSection: View {
         } footer: {
             Text("""
             Your API key is saved in Keychain, secure storage on this iPhone. \
-            Optional BookBot sends your questions and their context to OpenAI using the selected model and your key; an internet connection is required. \
+            Saving a key does not enable sharing. OpenAI requests also need your permission above and an internet connection. \
+            OpenAI bills your API account separately for use; a ChatGPT subscription does not include API credit. \
             Saved books, physics readings and review checks work offline.
             """)
         }
@@ -94,6 +98,42 @@ struct AISettingsSection: View {
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("BookBot and new narration will need a key again. Your books, notes and downloaded audio stay on this device.")
+        }
+    }
+
+    private var sharingPermissionSection: some View {
+        Section {
+            Text(AISharingConsentStore.disclosure)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Link("OpenAI privacy policy", destination: URL(string: "https://openai.com/policies/privacy-policy/")!)
+            Toggle("Allow OpenAI requests", isOn: Binding(
+                get: { disclosureVersion == AISharingConsentStore.currentDisclosureVersion },
+                set: { allowed in
+                    if allowed {
+                        confirmsOpenAISharing = true
+                    } else {
+                        AISharingConsentStore.shared.revoke()
+                        onAIConfigurationChanged?()
+                    }
+                }
+            ))
+            .accessibilityIdentifier("ai.settings.sharing.allowed")
+        } header: {
+            Text("Your data and OpenAI")
+        } footer: {
+            Text("Optional. Reading and saved audio work with sharing off. Turning it off stops future requests; data already sent cannot be recalled. It does not remove your saved key. GenBooks does not sell your data or use it for advertising.")
+        }
+        .alert("Allow sharing with OpenAI?", isPresented: $confirmsOpenAISharing) {
+            Button("Allow OpenAI requests") {
+                AISharingConsentStore.shared.allowCurrentDisclosure()
+                onAIConfigurationChanged?()
+            }
+            .accessibilityIdentifier("ai.settings.sharing.confirm")
+            Button("Not now", role: .cancel) { }
+                .accessibilityIdentifier("ai.settings.sharing.cancel")
+        } message: {
+            Text("The data described above will be sent to OpenAI when these AI features run. OpenAI processes it under its own policies and bills your API account separately. You can turn this off here at any time.")
         }
     }
 
@@ -121,15 +161,17 @@ struct AISettingsSection: View {
     }
 
     private func removeKey() {
+        AISharingConsentStore.shared.revoke()
+        onAIConfigurationChanged?()
         do {
             try keyStore.saveAPIKey(nil)
             keyDraft = ""
             showingKey = false
             refreshKeyPresence()
-            statusMessage = "Key removed from Keychain."
+            statusMessage = "Key removed from Keychain. OpenAI sharing is off."
             onAIConfigurationChanged?()
         } catch {
-            statusMessage = "Couldn’t remove key."
+            statusMessage = "OpenAI sharing is off, but the key could not be removed. Try removing it again."
         }
     }
 }

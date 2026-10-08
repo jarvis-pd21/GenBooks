@@ -14,6 +14,7 @@ final class LibraryViewModel: ObservableObject {
     @Published private(set) var progressByBookId: [UUID: Double] = [:]
     @Published private(set) var chapterLabelByBookId: [UUID: String] = [:]
     @Published private(set) var minutesLeftByBookId: [UUID: Int] = [:]
+    @Published private(set) var originalPageBookIDs: Set<UUID> = []
     @Published private(set) var archivedBookIDs: Set<UUID> = []
     @Published private(set) var archiveError: String?
     private var visibilityStore: LibraryVisibilityStore?
@@ -104,6 +105,9 @@ final class LibraryViewModel: ObservableObject {
             // Stores are not @Published; nudge observers so Notebook Words can bind.
             objectWillChange.send()
             bootstrapIssues = await BundleFixtureLoader.seedLibraryBooksIfNeeded(into: versioning)
+            #if DEBUG
+            try await OriginalPDFUITestFixture.installIfRequested(rootDirectory: root, versioning: versioning)
+            #endif
             try await reloadBooks(using: versioning)
             didLoadOffline = ai.adaptCallCount == 0
             await refreshProgress()
@@ -230,11 +234,6 @@ final class LibraryViewModel: ObservableObject {
     func importCanonFile(at url: URL) async throws {
         guard let versioning, let preferenceStore, let rootDirectory else { return }
         let prepared = try CanonFileIngest.prepare(from: url)
-        var draft = CreateBookDraft.blank()
-        draft.title = prepared.title ?? ""
-        draft.author = prepared.author ?? ""
-        draft.importedText = prepared.plainText
-        draft.importSourceKind = prepared.sourceKind
         let packets = try FilePEPacketStore(rootDirectory: rootDirectory)
         let drafts = try FileCreateBookDraftStore(rootDirectory: rootDirectory)
         let wizard = CreateBookWizardService(
@@ -244,6 +243,7 @@ final class LibraryViewModel: ObservableObject {
             drafts: drafts,
             ai: ai
         )
+        let draft = try await wizard.prepareImport(draft: .blank(), payload: prepared)
         let book = try await wizard.importAndSave(draft: draft)
         try await reloadBooks(using: versioning)
         inboundImportError = nil
@@ -294,6 +294,7 @@ final class LibraryViewModel: ObservableObject {
         progressByBookId = [:]
         chapterLabelByBookId = [:]
         minutesLeftByBookId = [:]
+        originalPageBookIDs = []
         pendingOpenBookID = nil
         didLoadOffline = false
         loadError = error.localizedDescription
@@ -304,8 +305,31 @@ final class LibraryViewModel: ObservableObject {
         var map: [UUID: Double] = [:]
         var chapters: [UUID: String] = [:]
         var minutes: [UUID: Int] = [:]
+        var originalIDs: Set<UUID> = []
+        let originals = try? OriginalDocumentStore(rootDirectory: rootDirectory)
         let prefs = ReadingTimePreferences.default
         for book in books {
+            if UserDefaults.standard.string(forKey: "livingreader.original.mode.\(book.id.uuidString)") != "text",
+               let originals {
+                do {
+                    if let original = try originals.load(bookID: book.id) {
+                        let source = original.attachment.source
+                        let position = try originals.loadPosition(bookID: book.id, sourceSHA256: source.sha256)
+                        let page = position?.pageIndex ?? 0
+                        originalIDs.insert(book.id)
+                        map[book.id] = Double(page) / Double(source.pageCount)
+                        chapters[book.id] = "PDF page \(page + 1) of \(source.pageCount)"
+                        minutes[book.id] = 0 // No reading-time claim for graphics or unextracted scans.
+                        continue
+                    }
+                } catch {
+                    originalIDs.insert(book.id)
+                    map[book.id] = 0
+                    chapters[book.id] = "Original pages unavailable · open for details"
+                    minutes[book.id] = 0
+                    continue
+                }
+            }
             let ordered = book.chapters.sorted { $0.orderIndex < $1.orderIndex }
             guard !ordered.isEmpty else {
                 map[book.id] = 0
@@ -333,6 +357,7 @@ final class LibraryViewModel: ObservableObject {
         progressByBookId = map
         chapterLabelByBookId = chapters
         minutesLeftByBookId = minutes
+        originalPageBookIDs = originalIDs
     }
 
     static func defaultRootDirectory() throws -> URL {
@@ -767,6 +792,7 @@ struct LibraryView: View {
                 feedbackStore: feedbackStore,
                 preferenceStore: preferenceStore,
                 modelPrefs: modelPrefs,
+                originalDocumentsRoot: model.rootDirectory,
                 listenServices: model.listenServices
             )
             .toolbar(.hidden, for: .tabBar)
@@ -805,12 +831,14 @@ struct LibraryView: View {
                         .font(.subheadline)
                         .foregroundStyle(LRColor.secondaryText)
                 }
-                Text("\(percent)% through chapters · about \(minutes) min left")
+                Text(model.originalPageBookIDs.contains(book.id)
+                     ? "\(percent)% through PDF pages"
+                     : "\(percent)% through chapters · about \(minutes) min left")
                     .font(.caption)
                     .foregroundStyle(LRColor.secondaryText)
                 ProgressView(value: min(1, max(0, progress)))
                     .tint(LRColor.accent)
-                    .accessibilityLabel("Chapter position")
+                    .accessibilityLabel(model.originalPageBookIDs.contains(book.id) ? "PDF page position" : "Chapter position")
                     .accessibilityValue("\(percent) percent")
                     .accessibilityIdentifier("library.progress.\(book.id.uuidString)")
                 Text(chapter)

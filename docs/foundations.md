@@ -107,6 +107,8 @@ flowchart TB
 
 ## Current implementation boundary
 
-The fixed Physics course and its local progress are separate from the generative Library. Preferences do not rewrite its readings. BookBot can discuss a lesson online using general model knowledge; it does not independently verify those replies or turn them into scored evidence. A source-backed authoring failure leaves the candidate unpublished and existing reading available.
+The fixed Physics course and its local progress are separate from the generative Library. Preferences do not rewrite its readings. BookBot requires your OpenAI key and explicit sharing permission in Settings → BookBot before sending your prompt and relevant reading context to OpenAI. You can revoke permission to block new requests. Replies can use general model knowledge; they are not independently verified or treated as scored evidence. A source-backed authoring failure leaves the candidate unpublished and existing reading available.
 
-The public project includes native iOS reading and learning plus a web app with account sync across browsers. Native and web records remain separate. SMS, iMessage and phone-call learning interfaces are outside this release. The system map expresses a design rationale, not proof of improved retention or an autonomous adaptive curriculum.
+New unprotected PDF imports retain the unchanged supplied file. Original pages displays its tables, figures, equations and layout, including scans, with a separate saved position. Quality is limited by the source; search needs an existing text layer and no OCR is performed. Text view and EPUB imports can lose images and layout.
+
+The native iPhone app stores books and learning records locally without an account. The separate web app supports account sync across browsers; it does not sync with the iPhone library. SMS, iMessage and phone-call learning interfaces are outside this release. The system map expresses a design rationale, not proof of improved retention or an autonomous adaptive curriculum.

@@ -61,7 +61,8 @@ Consumed chapter revisions are pinned in a ledger. Completing a chapter or advan
 
 | Workflow | Actual scope | Factuality boundary |
 | --- | --- | --- |
-| Paste / EPUB / PDF import | Convert supplied text to a local structured manuscript, initially Canon | No OCR for scanned PDFs; original layout, images, and math formatting are not preserved |
+| Paste / EPUB / PDF import | Convert supplied text to a local manuscript; retain complete new PDF imports separately | Text and EPUB extraction can lose layout/images; scans remain readable as PDFs but no OCR is performed |
+| Original pages | Render unchanged local PDF bytes with PDFKit; save page position separately | Quality is limited by supplied files; text notes and consumed-chapter states stay in Text view |
 | Ordinary generated book | Brief and outline, then generated chapters; draft state supports retry | No automatic comprehensive web research. Evidence/checklist validation does not independently verify every assertion |
 | Source-backed opening preview | Retrieve one Wikipedia opening excerpt; retain revision, attribution, license metadata, and source text; generate and separately review preview prose against it | Single-source support checking, not verification of an entire book or independent truth checking |
 | Source-preview selected-word continuation | Rewrite the eligible unread suffix using the saved source, with fresh review and restorable revision | Supports more explanation or less detail; not images or later-chapter authoring |

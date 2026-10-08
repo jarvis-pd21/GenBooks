@@ -74,9 +74,9 @@ final class SourceContinuationTrialTests: XCTestCase {
             ContinuationTrialProcessInfo(arguments: [SourceContinuationTrial.argument, "-sourcePreviewTrial"],
                 environment: [SourceContinuationTrial.environmentKey: "invalid", "SOURCE_PREVIEW_TRIAL_ID": UUID().uuidString])
         ] {
-            let pair = AIServiceResolver.makeAskAndAdaptation(keyStore: key, processInfo: process, bundleID: SourceContinuationTrial.bundleID)
+            let pair = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true }, keyStore: key, processInfo: process, bundleID: SourceContinuationTrial.bundleID)
             let create = AIServiceResolver.makeCreateGeneration(keyStore: key, processInfo: process, bundleID: SourceContinuationTrial.bundleID)
-            let direct = AIServiceResolver.makeDefault(keyStore: key, processInfo: process, bundleID: SourceContinuationTrial.bundleID)
+            let direct = AIServiceResolver.makeDefault(sharingPermission: { true }, keyStore: key, processInfo: process, bundleID: SourceContinuationTrial.bundleID)
             for service in [pair.ask, pair.adaptation, create, direct] {
                 let closed = try XCTUnwrap(service as? SourceContinuationTrialService)
                 XCTAssertFalse(closed.supportsSourceContinuation)
@@ -91,10 +91,10 @@ final class SourceContinuationTrialTests: XCTestCase {
     func testOrdinaryAndOldCreateResolversRetainTheirExistingRoutes() {
         let key = ContinuationTrialKeySpy()
         let ordinary = ContinuationTrialProcessInfo(arguments: [], environment: [:])
-        let service = AIServiceResolver.makeDefault(keyStore: key, modelPreference: .gpt41,
+        let service = AIServiceResolver.makeDefault(sharingPermission: { true }, keyStore: key, modelPreference: .gpt41,
             processInfo: ordinary, bundleID: "com.jarvis.livingreader")
         XCTAssertEqual((service as? LiveOpenAIService)?.preferredModelID, OpenAIModelOption.gpt41.rawValue)
-        let mock = AIServiceResolver.makeDefault(keyStore: key,
+        let mock = AIServiceResolver.makeDefault(sharingPermission: { true }, keyStore: key,
             processInfo: ContinuationTrialProcessInfo(arguments: ["-uitesting"], environment: [:]), bundleID: "ordinary")
         XCTAssertTrue(mock is MockAIService)
         let old = AIServiceResolver.makeCreateGeneration(keyStore: key,
@@ -141,7 +141,7 @@ final class SourceContinuationTrialTests: XCTestCase {
 
     func testOpenInjectedWrapperStillRejectsAskCreateAndLegacyAdaptationBeforeKeyRead() async throws {
         let key = ContinuationTrialKeySpy()
-        let live = LiveOpenAIService(apiKeyProvider: { try key.loadAPIKey() }, preferredModel: .defaultGeneration,
+        let live = LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { try key.loadAPIKey() }, preferredModel: .defaultGeneration,
             session: MockURLProtocol.makeSession(), endpoint: SourceContinuationTrial.endpoint)
         let service = SourceContinuationTrialService(live: live)
         do { _ = try await service.ask(askRequest); XCTFail() } catch { XCTAssertTrue(error is SourceGroundingError) }
@@ -457,7 +457,7 @@ final class SourceContinuationTrialTests: XCTestCase {
               oldSuffix: ["An old replaceable account."], source: source())
     }
     private func injectedService() -> SourceContinuationTrialService {
-        .init(live: LiveOpenAIService(apiKeyProvider: { SourceContinuationTrial.proxyLabel }, preferredModel: .defaultGeneration,
+        .init(live: LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { SourceContinuationTrial.proxyLabel }, preferredModel: .defaultGeneration,
             session: MockURLProtocol.makeSession(), endpoint: SourceContinuationTrial.endpoint))
     }
     private func expectedParagraphs(frozenText: [String]? = nil, joins: Bool = false) -> [String] {

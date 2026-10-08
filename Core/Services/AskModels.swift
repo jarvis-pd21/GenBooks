@@ -59,9 +59,9 @@ enum AIServiceError: Error, Equatable, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            return "No API key yet. Add one in Reading settings → AI, or use Mock answers for demos. Reading still works offline."
+            return "No API key yet. Add one in Settings → BookBot. Reading still works offline."
         case .invalidAPIKey:
-            return "API key was rejected. Update it in Reading settings → AI. Reading is unaffected."
+            return "API key was rejected. Update it in Settings → BookBot. Reading is unaffected."
         case .timedOut:
             return "The AI request timed out. Try again when you have a better connection."
         case .offline:

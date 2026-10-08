@@ -536,7 +536,7 @@ final class WordForwardRegenTests: XCTestCase {
     func testGenerationResolvesToLiveAstraWithOrWithoutAKey() throws {
         let keyed = InMemoryAPIKeyStore()
         try keyed.saveAPIKey("sk-test-key")
-        let live = AIServiceResolver.makeAskAndAdaptation(
+        let live = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: keyed,
             askModel: .defaultAsk,
             generationModel: .defaultGeneration,
@@ -545,7 +545,7 @@ final class WordForwardRegenTests: XCTestCase {
         let generation = try XCTUnwrap(live.adaptation as? LiveOpenAIService)
         XCTAssertEqual(generation.preferredModelID, OpenAIModelOption.gpt6Astra.rawValue)
 
-        let keyless = AIServiceResolver.makeAskAndAdaptation(
+        let keyless = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: InMemoryAPIKeyStore(),
             generationModel: .defaultGeneration,
             processInfo: MockProcessInfo(arguments: [])
@@ -559,7 +559,7 @@ final class WordForwardRegenTests: XCTestCase {
     func testKeylessLiveGenerationThrowsAndPreservesContinuation() async throws {
         let seeded = try await seedAnchorChapter()
         let latest = try await versioning.loadBook(id: book.id)!
-        let keyless = LiveOpenAIService(apiKeyProvider: { nil }, preferredModel: .gpt6Astra, timeout: 1)
+        let keyless = LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { nil }, preferredModel: .gpt6Astra, timeout: 1)
         let service = LivingBookAdaptationService(
             versioning: versioning,
             feedbackStore: feedbackStore,

@@ -50,6 +50,48 @@ final class Wave2BooksUXTests: XCTestCase {
 
     // MARK: - Comfort settings
 
+    func testTextRemountRestoresReadingBeyondHistoricalJumpWithoutReplayingIt() async throws {
+        let (model, book) = try await makeReader(settings: ReaderSettingsStore(defaults: defaults))
+        let document = try XCTUnwrap(model.document)
+        model.seekToProgress(0.1)
+        let historicalJump = try XCTUnwrap(model.jumpUtf16)
+        let historicalToken = try XCTUnwrap(model.jumpToken)
+        // Model the reader scrolling farther after the explicit jump has settled.
+        try await Task.sleep(nanoseconds: 500_000_000)
+        let farther = try XCTUnwrap(document.location(atUtf16: document.utf16Location(forProgress: 0.6)))
+        model.handleLocationChange(farther)
+        XCTAssertEqual(model.currentLocation, farther)
+        XCTAssertEqual(model.jumpToken, historicalToken, "The previously handled command remains until a remount boundary")
+        XCTAssertEqual(model.jumpUtf16, historicalJump)
+
+        model.prepareForTextRemount()
+        XCTAssertNil(model.jumpToken)
+        XCTAssertNil(model.jumpUtf16)
+        XCTAssertEqual(model.restoreLocation, farther)
+        XCTAssertEqual(model.currentLocation, farther)
+        XCTAssertTrue(model.isReady, "Returning to Text must reuse the loaded model")
+        XCTAssertTrue(model.document?.attributedText === document.attributedText)
+        await model.persistNow() // The existing text onDisappear path.
+        let saved = try XCTUnwrap(checkpoints.loadCheckpoint(bookId: book.id))
+        XCTAssertEqual(saved.blockId, farther.blockId)
+        XCTAssertEqual(saved.characterOffset, farther.characterOffset)
+        XCTAssertNotEqual(document.utf16Location(for: farther), historicalJump)
+    }
+
+    func testTextRemountSettleDoesNotConsumeAnExploratoryScrubberJump() async throws {
+        let (model, _) = try await makeReader(settings: ReaderSettingsStore(defaults: defaults))
+        model.seekToProgress(0.85)
+        let exploratory = try XCTUnwrap(model.currentLocation)
+        let before = try await versioning.ledgerSnapshot()
+        model.prepareForTextRemount()
+        model.handleLocationChange(exploratory) // First renderer settle after returning from Original pages.
+        await model.persistNow()
+        let after = try await versioning.ledgerSnapshot()
+        XCTAssertEqual(after, before, "Changing reader presentation must not consume skipped text chapters")
+        XCTAssertEqual(model.restoreLocation, exploratory)
+        XCTAssertEqual(model.currentLocation, exploratory)
+    }
+
     func testEditedSearchInvalidatesOldPreviewUntilSubmitted() async throws {
         let (model, _) = try await makeReader(settings: ReaderSettingsStore(defaults: defaults))
         model.setSearchScope(.wholeBook)

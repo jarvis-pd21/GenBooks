@@ -29,7 +29,8 @@ Local-first architecture alone does not determine the App Store privacy label. A
 - The Physics course is fixed original content, with disclosed AI assistance and reference links.
 - Ordinary BookBot replies are not independently source-verified.
 - Source-backed authoring currently covers an opening preview and a limited selected-word continuation, not a fully verified generated textbook.
-- Imported text may lose figures, equations, and layout; scanned PDF OCR is absent.
-- No account sync, shared learning backend, or other user channel is implemented.
+- New PDF imports retain the exact supplied PDF. Original pages displays its tables, figures, equations and layout, with zoom, contents, text-layer search and a separate saved page position. Text view is an extracted reading alternative and may omit these visual details. No OCR or image enhancement is performed.
+- EPUB imports currently extract text; their illustrations and layout are not preserved. There is no in-app tool to attach a PDF to an older text-only import. Import its PDF as a new book to gain Original pages; existing notes stay on the earlier text copy.
+- The native app has no account or cross-device sync. The separately deployed web app has its own account storage; native and web libraries do not synchronize.
 
 Review these statements against the actual release before publishing store copy. Do not label simulator-only or skipped-provider evidence as a physical-device or live-service pass.

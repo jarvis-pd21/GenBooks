@@ -282,7 +282,7 @@ final class CreateReadingTimeTests: XCTestCase {
         defer { session.invalidateAndCancel(); MockURLProtocol.reset() }
         var providerCalls = 0
         MockURLProtocol.requestHandler = { _ in providerCalls += 1; throw URLError(.badServerResponse) }
-        let ai = LiveOpenAIService(apiKeyProvider: { "unused-authored-test-value" }, preferredModel: .defaultGeneration, session: session)
+        let ai = LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { "unused-authored-test-value" }, preferredModel: .defaultGeneration, session: session)
         let service = environment.wizard(ai: ai, retriever: retriever)
         var original = makeDraft(input: nil)
         original.length = .short
