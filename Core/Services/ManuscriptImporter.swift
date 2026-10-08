@@ -128,15 +128,12 @@ enum ManuscriptImporter {
             let kind: ContentBlockKind
             if index == 0, looksLikeHeading(paragraph) {
                 kind = .heading
-            } else if paragraph.hasPrefix(">") {
-                kind = .quote
             } else {
                 kind = .paragraph
             }
-            let text = paragraph.hasPrefix(">")
-                ? paragraph.drop(while: { $0 == ">" || $0 == " " }).trimmingCharacters(in: .whitespacesAndNewlines)
-                : paragraph
-            return ContentBlock(id: UUID(), kind: kind, text: text, orderIndex: index)
+            // Canonical input is source text, not Markdown quote syntax. A >
+            // may be a comparison or a literal symbol and must not be removed.
+            return ContentBlock(id: UUID(), kind: kind, text: paragraph, orderIndex: index)
         }
     }
 

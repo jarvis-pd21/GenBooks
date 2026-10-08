@@ -33,7 +33,7 @@ final class AIServiceTests: XCTestCase {
         timeout: TimeInterval = 2
     ) -> LiveOpenAIService {
         let store = keyStore!
-        return LiveOpenAIService(
+        return LiveOpenAIService(sharingPermission: { true },
             apiKeyProvider: { try store.loadAPIKey() },
             preferredModel: preferredModel,
             session: MockURLProtocol.makeSession(),
@@ -592,7 +592,7 @@ final class AIServiceTests: XCTestCase {
         let checkpoints = try FileReadingCheckpointStore(rootDirectory: tempRoot)
 
         XCTAssertNil(try keyStore.loadAPIKey())
-        let pair = AIServiceResolver.makeAskAndAdaptation(
+        let pair = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: keyStore,
             askModel: modelPrefs.askModel,
             generationModel: modelPrefs.generationModel
@@ -685,7 +685,7 @@ final class AIServiceTests: XCTestCase {
         }
 
         let store = keyStore!
-        let forced = LiveOpenAIService(
+        let forced = LiveOpenAIService(sharingPermission: { true },
             apiKeyProvider: { try store.loadAPIKey() },
             preferredModel: .gpt6Astra,
             session: MockURLProtocol.makeSession(),
@@ -720,7 +720,7 @@ final class AIServiceTests: XCTestCase {
 
     func testResolverAskUsesLunaGenerationUsesAstra() throws {
         try keyStore.saveAPIKey("sk-test-resolver")
-        let pair = AIServiceResolver.makeAskAndAdaptation(
+        let pair = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: keyStore,
             askModel: .gpt56Luna,
             generationModel: .gpt6Astra
@@ -736,7 +736,7 @@ final class AIServiceTests: XCTestCase {
         for arg in ["-useMockAI", "-phase4MockAsk", "-phase5AdaptationDemo", "-uitesting"] {
             let info = MockProcessInfo(arguments: [arg])
             XCTAssertTrue(AIServiceResolver.prefersMock(processInfo: info), arg)
-            let service = AIServiceResolver.makeDefault(
+            let service = AIServiceResolver.makeDefault(sharingPermission: { true },
                 keyStore: keyStore,
                 modelPreference: .gpt56Luna,
                 processInfo: info
@@ -750,7 +750,7 @@ final class AIServiceTests: XCTestCase {
         try keyStore.saveAPIKey("sk-test-present")
         let info = MockProcessInfo(arguments: [ArgentinaQualityRegen.launchArgument])
         XCTAssertFalse(AIServiceResolver.prefersMock(processInfo: info))
-        let pair = AIServiceResolver.makeAskAndAdaptation(
+        let pair = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: keyStore,
             askModel: .gpt56Luna,
             generationModel: .gpt6Astra,
@@ -818,7 +818,7 @@ final class GenerationProviderTests: XCTestCase {
     }
 
     private func live(key: String? = "test-provider-key", forced: Bool = false) -> LiveOpenAIService {
-        LiveOpenAIService(
+        LiveOpenAIService(sharingPermission: { true },
             apiKeyProvider: { key }, preferredModel: .gpt6Astra,
             session: MockURLProtocol.makeSession(), forceDeterministicAdaptation: forced
         )
@@ -853,7 +853,7 @@ final class GenerationProviderTests: XCTestCase {
 
     func testResolverDefersKeyReadAndTracksLaterKeyChanges() async throws {
         let store = CountingKeyStore()
-        let pair = AIServiceResolver.makeAskAndAdaptation(
+        let pair = AIServiceResolver.makeAskAndAdaptation(sharingPermission: { true },
             keyStore: store, session: MockURLProtocol.makeSession(),
             processInfo: MockProcessInfo(arguments: [])
         )
@@ -965,7 +965,7 @@ final class GenerationProviderTests: XCTestCase {
 
     func testSuccessfulAdaptationUsesOnlySelectedModelAndProviderText() async throws {
         let input = try requests()
-        let service = LiveOpenAIService(apiKey: "test-provider-key", preferredModel: .gpt41, session: MockURLProtocol.makeSession())
+        let service = LiveOpenAIService(sharingPermission: { true }, apiKey: "test-provider-key", preferredModel: .gpt41, session: MockURLProtocol.makeSession())
         let prose = Array(repeating: "river", count: 40).joined(separator: " ")
         var models: [String] = []
         MockURLProtocol.requestHandler = { request in
@@ -989,7 +989,7 @@ final class GenerationProviderTests: XCTestCase {
 
     func testOnlyExplicitDeterministicModeBypassesProvider() async throws {
         let input = try requests()
-        let service = LiveOpenAIService(
+        let service = LiveOpenAIService(sharingPermission: { true },
             apiKeyProvider: { XCTFail("Explicit deterministic mode must not read keys"); return nil },
             session: MockURLProtocol.makeSession(), forceDeterministicAdaptation: true
         )
@@ -1004,7 +1004,7 @@ final class GenerationProviderTests: XCTestCase {
         XCTAssertNil(MockURLProtocol.lastRequest)
         for arg in ["-useMockAI", "-phase4MockAsk", "-phase5AdaptationDemo", "-uitesting"] {
             let store = CountingKeyStore()
-            let resolved = AIServiceResolver.makeDefault(keyStore: store, processInfo: MockProcessInfo(arguments: [arg]))
+            let resolved = AIServiceResolver.makeDefault(sharingPermission: { true }, keyStore: store, processInfo: MockProcessInfo(arguments: [arg]))
             XCTAssertTrue(resolved is MockAIService)
             XCTAssertTrue(resolved.usesDeterministicGeneration)
             XCTAssertEqual(store.loadCount, 0)
@@ -1031,7 +1031,7 @@ final class GenerationProviderTests: XCTestCase {
                 return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
                         Data(#"{"choices":[{"message":{"content":"Provider answer"}}]}"#.utf8))
             }
-            let service = LiveOpenAIService(apiKey: "test-provider-key", preferredModel: model, session: MockURLProtocol.makeSession())
+            let service = LiveOpenAIService(sharingPermission: { true }, apiKey: "test-provider-key", preferredModel: model, session: MockURLProtocol.makeSession())
             _ = try await service.ask(request)
             XCTAssertEqual(bodies.count, 1)
             let body = try XCTUnwrap(bodies.first)
@@ -1057,7 +1057,7 @@ final class GenerationProviderTests: XCTestCase {
                 let data = try JSONSerialization.data(withJSONObject: ["choices": [["message": ["content": content]]]])
                 return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, data)
             }
-            let service = LiveOpenAIService(apiKey: "test-provider-key", preferredModel: model, session: MockURLProtocol.makeSession())
+            let service = LiveOpenAIService(sharingPermission: { true }, apiKey: "test-provider-key", preferredModel: model, session: MockURLProtocol.makeSession())
             _ = try await service.makeAdaptationPlan(input.plan)
             _ = try await service.generateAdaptedChapterWithPacket(input.generation)
             XCTAssertEqual(bodies.count, 2)
@@ -1125,7 +1125,7 @@ final class GenerationProviderTests: XCTestCase {
                 let data = try JSONSerialization.data(withJSONObject: ["choices": [["message": ["content": content]]]])
                 return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, data)
             }
-            let service = LiveOpenAIService(apiKey: "test-provider-key", preferredModel: .gpt6Astra,
+            let service = LiveOpenAIService(sharingPermission: { true }, apiKey: "test-provider-key", preferredModel: .gpt6Astra,
                                            session: MockURLProtocol.makeSession(), timeout: timeout)
             _ = try await service.ask(AskRequest(userQuestion: "Hello", bookTitle: "Book", bookAuthor: "Author", consumedContext: "river"))
             _ = try await service.makeAdaptationPlan(input.plan)

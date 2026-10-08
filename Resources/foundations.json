@@ -230,12 +230,12 @@
       "summary": "Offline reading and a fixed learning pilot, with optional online AI.",
       "paragraphs": [
         "Library holds structured books. Reader presents saved text and preserves prior consumed chapter revisions. Notebook holds notes and saved words. Learning contains a fixed, original Physics course with separate local progress. These saved reading and learning activities work without AI or an account.",
-        "BookBot uses your configured provider key and sends selected reading context and your prompt to the provider when you ask. Its replies can use general model knowledge and are not independently source-verified. They do not silently become a verified lesson or change a scored answer.",
+        "BookBot requires your OpenAI key and explicit sharing permission in Settings → BookBot before sending your prompt and relevant reading context to OpenAI. You can revoke permission to block new requests. Replies can use general model knowledge and are not independently source-verified; they do not become a verified lesson or change a scored answer.",
         "Source-backed Create currently produces a reviewed opening preview from one retrieved source, with a limited selected-word continuation workflow. It is not a fully researched textbook generator. Retrieval or review failure keeps the candidate unpublished; it does not fabricate a source. Ordinary generation has different evidence limits.",
-        "The public project is a native iOS app with local storage. It has no shared account or learning backend, and no web, SMS, iMessage, or phone-call learning interface."
+        "The native iPhone app stores books and learning records locally without an account. The separate web app supports account sync across browsers; it does not sync with the iPhone library. SMS, iMessage and phone-call learning interfaces are outside this release."
       ],
       "bullets": [
-        "DRM-free EPUB and text-based PDF imports become structured text; illustrations, equations, and layout may be lost. Scanned PDF pages are not OCR-transcribed.",
+        "New unprotected PDF imports retain the unchanged supplied file. Original pages displays its tables, figures, equations and layout, including scans, with a separate saved position. Quality is limited by the source; search needs an existing text layer and no OCR is performed. Text view and EPUB imports can lose images and layout.",
         "New AI replies, generation, source retrieval, and uncached narration require their provider or network. Saved reading remains available if those services fail.",
         "A saved source or AI support review is useful evidence, not a guarantee of factual correctness."
       ],

@@ -44,9 +44,9 @@ final class SourcePreviewTransportTests: XCTestCase {
         var calls = 0
         MockURLProtocol.requestHandler = { _ in calls += 1; throw URLError(.badServerResponse) }
         for service in [
-            LiveOpenAIService(apiKeyProvider: { nil }, preferredModel: .defaultGeneration, session: MockURLProtocol.makeSession()),
-            LiveOpenAIService(apiKeyProvider: { "test-source-key" }, preferredModel: .defaultAsk, session: MockURLProtocol.makeSession()),
-            LiveOpenAIService(apiKeyProvider: { "test-source-key" }, preferredModel: .defaultGeneration,
+            LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { nil }, preferredModel: .defaultGeneration, session: MockURLProtocol.makeSession()),
+            LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { "test-source-key" }, preferredModel: .defaultAsk, session: MockURLProtocol.makeSession()),
+            LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { "test-source-key" }, preferredModel: .defaultGeneration,
                               session: MockURLProtocol.makeSession(), forceDeterministicAdaptation: true)
         ] {
             do { _ = try await service.writeSourceContinuation(request); XCTFail("Must refuse") }
@@ -148,7 +148,7 @@ final class SourcePreviewTransportTests: XCTestCase {
             throw URLError(.badServerResponse)
         }
         for (model, key, deterministic) in cases {
-            let service = LiveOpenAIService(apiKeyProvider: { key }, preferredModel: model,
+            let service = LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { key }, preferredModel: model,
                 session: MockURLProtocol.makeSession(), forceDeterministicAdaptation: deterministic)
             for reviewer in [false, true] {
                 do {
@@ -350,7 +350,7 @@ final class SourcePreviewTransportTests: XCTestCase {
     }
 
     private func live(timeout: TimeInterval? = nil) -> LiveOpenAIService {
-        LiveOpenAIService(apiKeyProvider: { "test-source-key" }, preferredModel: .gpt6Astra,
+        LiveOpenAIService(sharingPermission: { true }, apiKeyProvider: { "test-source-key" }, preferredModel: .gpt6Astra,
                           session: MockURLProtocol.makeSession(), timeout: timeout)
     }
 

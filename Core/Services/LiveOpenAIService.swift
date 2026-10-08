@@ -12,6 +12,7 @@ import Foundation
 final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable {
     typealias APIKeyProvider = @Sendable () throws -> String?
 
+    private let sharingPermission: AISharingConsentStore.PermissionProvider
     private let apiKeyProvider: APIKeyProvider
     private let preferredModel: OpenAIModelOption
     private let session: URLSession
@@ -142,6 +143,7 @@ final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable 
     }
 
     init(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         apiKeyProvider: @escaping APIKeyProvider,
         preferredModel: OpenAIModelOption = .defaultAsk,
         session: URLSession? = nil,
@@ -149,6 +151,7 @@ final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable 
         timeout: TimeInterval? = nil,
         forceDeterministicAdaptation: Bool = false
     ) {
+        self.sharingPermission = sharingPermission
         self.apiKeyProvider = apiKeyProvider
         self.preferredModel = preferredModel
         self.endpoint = endpoint
@@ -168,6 +171,7 @@ final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable 
     }
 
     convenience init(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         apiKey: String,
         preferredModel: OpenAIModelOption = .defaultAsk,
         session: URLSession? = nil,
@@ -175,6 +179,7 @@ final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable 
         forceDeterministicAdaptation: Bool = false
     ) {
         self.init(
+            sharingPermission: sharingPermission,
             apiKeyProvider: { apiKey },
             preferredModel: preferredModel,
             session: session,
@@ -440,6 +445,7 @@ final class LiveOpenAIService: AIService, SourceGroundedAI, @unchecked Sendable 
             }
         }
 
+        try AISharingConsentStore.requirePermission(using: sharingPermission)
         let data: Data
         let response: URLResponse
         do {

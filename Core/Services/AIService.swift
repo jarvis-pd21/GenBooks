@@ -50,6 +50,7 @@ enum AIServiceResolver {
 
     /// Resolve a single AIService for the given preferred model (Ask or generation).
     static func makeDefault(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         keyStore: APIKeyStoring = KeychainAPIKeyStore.shared,
         modelPreference: OpenAIModelOption = .defaultAsk,
         session: URLSession = .shared,
@@ -66,6 +67,7 @@ enum AIServiceResolver {
             return MockAIService()
         }
         return LiveOpenAIService(
+            sharingPermission: sharingPermission,
             apiKeyProvider: { try keyStore.loadAPIKey() },
             preferredModel: modelPreference,
             session: session
@@ -74,6 +76,7 @@ enum AIServiceResolver {
 
     /// Resolve Ask (luna) + adaptation/generation (astra) sharing the same Keychain key.
     static func makeAskAndAdaptation(
+        sharingPermission: @escaping AISharingConsentStore.PermissionProvider = { AISharingConsentStore.shared.isAllowed },
         keyStore: APIKeyStoring = KeychainAPIKeyStore.shared,
         askModel: OpenAIModelOption = .defaultAsk,
         generationModel: OpenAIModelOption = .defaultGeneration,
@@ -82,6 +85,7 @@ enum AIServiceResolver {
         bundleID: String? = Bundle.main.bundleIdentifier
     ) -> (ask: any AIService, adaptation: any AIService) {
         let ask = makeDefault(
+            sharingPermission: sharingPermission,
             keyStore: keyStore,
             modelPreference: askModel,
             session: session,
@@ -89,6 +93,7 @@ enum AIServiceResolver {
             bundleID: bundleID
         )
         let adaptation = makeDefault(
+            sharingPermission: sharingPermission,
             keyStore: keyStore,
             modelPreference: generationModel,
             session: session,

@@ -238,9 +238,9 @@ enum ListenError: Error, Equatable, LocalizedError, Sendable {
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            return "Narration needs an API key. Add one in Reading settings → AI. Reading still works offline."
+            return "Narration needs an API key. Add one in Settings → BookBot. Reading still works offline."
         case .invalidAPIKey:
-            return "The API key was rejected, so narration can’t be made. Update it in Reading settings → AI."
+            return "The API key was rejected, so narration can’t be made. Update it in Settings → BookBot."
         case .offline:
             return "You’re offline. Chapters you’ve already downloaded still play; making new audio needs a connection."
         case .timedOut:

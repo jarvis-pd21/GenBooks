@@ -29,6 +29,7 @@ actor CreateBookWizardService {
     private let drafts: CreateBookDraftStoring
     private var ai: any AIService
     private let sourceRetriever: any ResearchSourceRetrieving
+    private var originalDocuments: OriginalDocumentStore?
 
     init(
         versioning: ManuscriptVersioningService,
@@ -36,7 +37,8 @@ actor CreateBookWizardService {
         packets: PEPacketStoring,
         drafts: CreateBookDraftStoring,
         ai: any AIService,
-        sourceRetriever: any ResearchSourceRetrieving = WikipediaSourceClient()
+        sourceRetriever: any ResearchSourceRetrieving = WikipediaSourceClient(),
+        originalDocuments: OriginalDocumentStore? = nil
     ) {
         self.versioning = versioning
         self.preferenceStore = preferenceStore
@@ -44,6 +46,7 @@ actor CreateBookWizardService {
         self.drafts = drafts
         self.ai = ai
         self.sourceRetriever = sourceRetriever
+        self.originalDocuments = originalDocuments
     }
 
     /// Swap AI after a Keychain key save without dropping the draft.
@@ -59,6 +62,29 @@ actor CreateBookWizardService {
         draft.resolvedOutline(for: draft.length)
     }
 
+    /// Both Open In / Share and the Create picker use this durable staging path.
+    func prepareImport(draft: CreateBookDraft, payload: CanonFileIngest.Payload) async throws -> CreateBookDraft {
+        var updated = draft
+        if updated.trimmedTitle.isEmpty { updated.title = payload.title ?? "" }
+        if updated.trimmedAuthor.isEmpty { updated.author = payload.author ?? "" }
+        updated.importedText = payload.plainText
+        updated.importSourceKind = payload.sourceKind
+        if let data = payload.originalPDF {
+            updated.importedOriginal = try await originalStore().stage(data: data, filename: payload.filename)
+        } else {
+            updated.importedOriginal = nil
+        }
+        return updated
+    }
+
+    private func originalStore() async throws -> OriginalDocumentStore {
+        if let originalDocuments { return originalDocuments }
+        let root = await versioning.manuscriptsDirectory.deletingLastPathComponent()
+        let store = try OriginalDocumentStore(rootDirectory: root)
+        originalDocuments = store
+        return store
+    }
+
     /// Path A: paste / PDF extract → Codable manuscript, offline-readable.
     @discardableResult
     func importAndSave(draft: CreateBookDraft) async throws -> Book {
@@ -71,13 +97,28 @@ actor CreateBookWizardService {
             throw CreateBookError.generationFailed("This draft already has a saved book. Start a new book to import without replacing it.")
         }
         try persistDraft(draft)
-        let book = try ManuscriptImporter.importPlainText(
+        var book = try ManuscriptImporter.importPlainText(
             text: draft.importedText,
             title: draft.trimmedTitle.isEmpty ? nil : draft.trimmedTitle,
             author: draft.trimmedAuthor.isEmpty ? nil : draft.trimmedAuthor,
             sourceKind: draft.importSourceKind,
             bookId: BundledSeedIDs.isProtected(draft.id) ? UUID() : draft.id
         )
+        if let source = draft.importedOriginal {
+            guard draft.importSourceKind == .pdfExtract else {
+                throw CreateBookError.generationFailed("The staged PDF does not match this import. Choose the file again.")
+            }
+            // Attach before publishing the manuscript: failed preservation must not
+            // masquerade as a successful PDF import. An orphaned attachment is safe to retry.
+            _ = try await originalStore().attach(bookID: book.id, source: source)
+            book.subtitle = "Canon · PDF original"
+            book.provenanceNotes = [
+                "Original PDF bytes preserved unchanged in this private library.",
+                source.hasExtractedText
+                    ? "Text mode contains extracted PDF text, not a layout-faithful edition. Tables, figures, reading order, and equations must be checked in Original pages. No AI rewrite was used."
+                    : "Text extraction was unavailable. Text mode contains clearly labeled GenBooks guidance only; read the full book in Original pages."
+            ]
+        }
         try await versioning.saveBook(book)
         try seedImportPackets(book: book, draft: draft)
         try drafts.delete(id: draft.id)

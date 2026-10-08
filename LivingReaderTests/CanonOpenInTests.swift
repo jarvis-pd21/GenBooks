@@ -40,6 +40,75 @@ final class CanonOpenInTests: XCTestCase {
         XCTAssertEqual(book.chapters.count, 2)
     }
 
+    func testEPUBReferencesDecodeOnceThroughMetadataHeadingsAndCanonicalText() throws {
+        let heading = "Reader&#x2019;s &#X1F642; &amp;gt; &lt;limit&gt;"
+        let paragraph = "It&#39;s the reader&#x2019;s example: &#x1F642; &amp;gt; &amp;#x2019; &quot;yes&quot; &apos;no&apos;."
+        let prepared = try CanonFileIngest.prepare(
+            data: fidelityEPUB(title: "Symbols &amp;gt; &#x1F642;", author: "O&#x2019;Brien",
+                body: "<h1>\(heading)</h1><p>\(paragraph)</p>"), filename: "symbols.epub")
+        XCTAssertEqual(prepared.title, "Symbols &gt; 🙂")
+        XCTAssertEqual(prepared.author, "O’Brien")
+        let book = try ManuscriptImporter.importPlainText(text: prepared.plainText,
+            title: prepared.title, author: prepared.author, sourceKind: prepared.sourceKind)
+        XCTAssertEqual(book.chapters.map(\.title), ["Reader’s 🙂 &gt; <limit>"])
+        let blocks = try XCTUnwrap(book.chapters.first?.activeRevision).blocks
+        XCTAssertTrue(blocks.contains { $0.text == "It's the reader’s example: 🙂 &gt; &#x2019; \"yes\" 'no'." })
+    }
+
+    func testEPUBLeadingComparisonSymbolsSurviveCanonicalSaveWithoutQuoteDecoration() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("CanonSymbols-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let packets = try FilePEPacketStore(rootDirectory: root)
+        let versioning = try ManuscriptVersioningService(rootDirectory: root, packets: packets)
+        let ai = MockAIService()
+        let wizard = CreateBookWizardService(versioning: versioning,
+            preferenceStore: try FileReaderPreferenceStore(rootDirectory: root), packets: packets,
+            drafts: try FileCreateBookDraftStore(rootDirectory: root), ai: ai)
+        let prose = "The following symbols are source material and must remain exactly as written in this reading edition."
+        let prepared = try CanonFileIngest.prepare(data: fidelityEPUB(
+            body: "<h1>Comparisons</h1><p>\(prose)</p><p>&gt; 5</p><p>&gt;</p><p>&gt;&gt; literal text</p>"),
+            filename: "comparisons.epub")
+        var draft = CreateBookDraft.blank()
+        draft.title = prepared.title ?? ""
+        draft.author = prepared.author ?? ""
+        draft.importedText = prepared.plainText
+        draft.importSourceKind = prepared.sourceKind
+        let saved = try await wizard.importAndSave(draft: draft)
+        let loadedValue = try await versioning.loadBook(id: saved.id)
+        let loaded = try XCTUnwrap(loadedValue)
+        let blocks = try XCTUnwrap(loaded.chapters.first?.activeRevision).blocks
+        XCTAssertEqual(blocks.map(\.text), ["Comparisons", prose, "> 5", ">", ">> literal text"])
+        XCTAssertFalse(blocks.contains { $0.kind == .quote }, "The reader adds quotation marks to quote blocks")
+        XCTAssertFalse(blocks.contains { $0.text.isEmpty })
+        XCTAssertEqual(ai.totalCallCount, 0)
+    }
+
+    func testEPUBInvalidNumericReferencesArePreservedRatherThanDeleted() throws {
+        let literal = "Invalid &#xD800; and &#x110000; and &#999999999999999999999; remain visible."
+        let prepared = try CanonFileIngest.prepare(data: fidelityEPUB(body: "<h1>References</h1><p>\(literal)</p>"),
+            filename: "references.epub")
+        XCTAssertTrue(prepared.plainText.contains(literal))
+        let book = try ManuscriptImporter.importPlainText(text: prepared.plainText,
+            title: prepared.title, author: prepared.author, sourceKind: prepared.sourceKind)
+        XCTAssertTrue(book.chapters.flatMap { $0.activeRevision?.blocks ?? [] }.contains { $0.text == literal })
+    }
+
+    private func fidelityEPUB(title: String = "Symbols", author: String = "Test Author", body: String) -> Data {
+        TestStoreZip.make([
+            "mimetype": Data("application/epub+zip".utf8),
+            "META-INF/container.xml": Data(#"<container><rootfiles><rootfile full-path="OEBPS/content.opf"/></rootfiles></container>"#.utf8),
+            "OEBPS/content.opf": Data("""
+                <package xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <metadata><dc:title>\(title)</dc:title><dc:creator>\(author)</dc:creator></metadata>
+                <manifest><item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/></manifest>
+                <spine><itemref idref="chapter"/></spine></package>
+                """.utf8),
+            "OEBPS/chapter.xhtml": Data("<html><body>\(body)</body></html>".utf8)
+        ])
+    }
+
     func testEncryptedEPUBFailsClosedWithoutExtractingText() throws {
         let zip = TestStoreZip.make([
             "mimetype": Data("application/epub+zip".utf8),

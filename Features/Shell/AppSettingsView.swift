@@ -40,6 +40,18 @@ struct AppSettingsView: View {
                         Label("Foundations", systemImage: "leaf")
                     }
                     .accessibilityIdentifier("settings.foundations")
+                    NavigationLink { PrivacyAndSupportView(page: .privacy) } label: {
+                        Label("Privacy Policy", systemImage: "hand.raised")
+                    }
+                    .accessibilityIdentifier("settings.privacy")
+                    NavigationLink { PrivacyAndSupportView(page: .support) } label: {
+                        Label("Help & Support", systemImage: "questionmark.circle")
+                    }
+                    .accessibilityIdentifier("settings.support")
+                    NavigationLink { OpenSourceNoticesView() } label: {
+                        Label("Open-source notices", systemImage: "doc.text")
+                    }
+                    .accessibilityIdentifier("settings.notices")
                     HStack {
                         Text("Version")
                         Spacer()

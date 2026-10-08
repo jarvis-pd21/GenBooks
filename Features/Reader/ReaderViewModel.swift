@@ -350,6 +350,23 @@ final class ReaderViewModel: ObservableObject {
         }
     }
 
+    /// A new TextKit coordinator must restore the latest reading place, not replay
+    /// an earlier TOC/search/scrubber command that the previous view already handled.
+    /// The reader remains loaded across the mode switch; its text checkpoint and
+    /// return-to-previous-place affordance keep their independent meanings.
+    func prepareForTextRemount() {
+        jumpToken = nil
+        jumpUtf16 = nil
+        jumpAnimated = false
+        pendingJumpUtf16 = nil
+        a11yScrubCommitTask?.cancel()
+        isScrubbing = false
+        ignoreScrollSavesUntil = .distantPast
+        if let currentLocation { restoreLocation = currentLocation }
+        // Restoring a viewport is not evidence that skipped chapters were read.
+        suppressNextSearchSettleConsumption = true
+    }
+
     func rebuildDocumentPreservingLocation() {
         let previous = currentLocation
         rebuildDocument()

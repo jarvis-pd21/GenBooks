@@ -754,7 +754,7 @@ final class ListenTests: XCTestCase {
 
     private func speechClient() -> OpenAISpeechClient {
         let store = keyStore!
-        return OpenAISpeechClient(
+        return OpenAISpeechClient(sharingPermission: { true },
             apiKeyProvider: { try store.loadAPIKey() },
             session: MockURLProtocol.makeSession(),
             timeout: 2
